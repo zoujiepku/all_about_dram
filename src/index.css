@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: #0f172a;
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Smooth SVG transitions */
+.dram-transition {
+  transition: all 0.4s ease;
+}
+
+/* Glow effects */
+.glow-blue {
+  filter: drop-shadow(0 0 6px #3b82f6);
+}
+.glow-green {
+  filter: drop-shadow(0 0 6px #22c55e);
+}
+.glow-amber {
+  filter: drop-shadow(0 0 6px #f59e0b);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 3px;
+}
+
+/* Lesson prose styles */
+.lesson-prose h2 {
+  @apply text-2xl font-bold text-dram-text mt-8 mb-3;
+}
+.lesson-prose h3 {
+  @apply text-lg font-semibold text-dram-blue mt-6 mb-2;
+}
+.lesson-prose p {
+  @apply text-dram-muted leading-relaxed mb-4;
+}
+.lesson-prose ul {
+  @apply list-disc list-inside space-y-1 text-dram-muted mb-4 ml-2;
+}
+.lesson-prose code {
+  @apply font-mono text-dram-amber bg-dram-surface px-1.5 py-0.5 rounded text-sm;
+}
+.lesson-prose strong {
+  @apply text-dram-text font-semibold;
+}
+
+/* Pulse animation for active cells */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 1s ease-in-out infinite;
+}
+
+/* Signal line animation */
+@keyframes signal-flow {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+.signal-flow {
+  stroke-dasharray: 6 4;
+  animation: signal-flow 0.8s linear infinite;
+}
