@@ -1,9 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar'
 
 export default function Layout({ completed, markComplete, level = 1 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [light, setLight] = useState(() => localStorage.getItem('theme') === 'light')
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('light', light)
+    localStorage.setItem('theme', light ? 'light' : 'dark')
+  }, [light])
 
   return (
     <div className="min-h-screen bg-dram-bg">
@@ -12,6 +18,8 @@ export default function Layout({ completed, markComplete, level = 1 }) {
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         level={level}
+        light={light}
+        onToggleTheme={() => setLight((l) => !l)}
       />
 
       {/* Mobile top bar */}
@@ -23,7 +31,14 @@ export default function Layout({ completed, markComplete, level = 1 }) {
         >
           ☰
         </button>
-        <span className="font-bold text-dram-text">💾 DRAM Deep Dive</span>
+        <span className="font-bold text-dram-text flex-1">💾 DRAM Deep Dive</span>
+        <button
+          onClick={() => setLight((l) => !l)}
+          className="text-dram-muted hover:text-dram-text text-lg leading-none"
+          aria-label="Toggle theme"
+        >
+          {light ? '☾' : '☀'}
+        </button>
       </header>
 
       {/* Main content */}

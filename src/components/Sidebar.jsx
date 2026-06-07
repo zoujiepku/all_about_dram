@@ -2,7 +2,7 @@ import { NavLink, Link } from 'react-router-dom'
 import { lessons } from '../data/lessons'
 import { lessonsL2 } from '../data/lessonsL2'
 
-export default function Sidebar({ completed, isOpen, onClose, level = 1 }) {
+export default function Sidebar({ completed, isOpen, onClose, level = 1, light = false, onToggleTheme }) {
   const activeList = level === 2 ? lessonsL2 : lessons
 
   const clusters = level === 2
@@ -46,7 +46,7 @@ export default function Sidebar({ completed, isOpen, onClose, level = 1 }) {
             className={`flex-1 text-center text-xs font-semibold py-1.5 rounded-md transition-colors ${
               level === 1
                 ? 'bg-dram-blue text-white'
-                : 'text-dram-muted hover:text-dram-text bg-dram-bg hover:bg-white/5'
+                : 'text-dram-muted hover:text-dram-text bg-dram-bg sidebar-hover'
             }`}
           >
             Level 1
@@ -57,7 +57,7 @@ export default function Sidebar({ completed, isOpen, onClose, level = 1 }) {
             className={`flex-1 text-center text-xs font-semibold py-1.5 rounded-md transition-colors ${
               level === 2
                 ? 'bg-dram-blue text-white'
-                : 'text-dram-muted hover:text-dram-text bg-dram-bg hover:bg-white/5'
+                : 'text-dram-muted hover:text-dram-text bg-dram-bg sidebar-hover'
             }`}
           >
             Level 2
@@ -99,8 +99,17 @@ export default function Sidebar({ completed, isOpen, onClose, level = 1 }) {
         </nav>
 
         {/* Footer */}
-        <div className="p-4 border-t border-dram-border text-xs text-dram-muted">
-          {level === 2 ? 'Advanced circuit & system depth' : 'Based on ISCA 2002 · Micron · IEEE 2024'}
+        <div className="p-4 border-t border-dram-border flex items-center justify-between">
+          <span className="text-xs text-dram-muted">
+            {level === 2 ? 'Advanced circuit & system depth' : 'Based on ISCA 2002 · Micron · IEEE 2024'}
+          </span>
+          <button
+            onClick={onToggleTheme}
+            className="text-dram-muted hover:text-dram-text text-lg leading-none ml-2 flex-shrink-0"
+            aria-label="Toggle theme"
+          >
+            {light ? '☾' : '☀'}
+          </button>
         </div>
       </aside>
     </>
@@ -117,7 +126,7 @@ function LessonLink({ lesson, completed, onClose }) {
         flex items-start gap-3 px-4 py-3 text-sm transition-colors
         ${isActive
           ? 'bg-dram-blue/10 border-r-2 border-dram-blue text-dram-text'
-          : 'text-dram-muted hover:text-dram-text hover:bg-white/5'}
+          : 'text-dram-muted hover:text-dram-text sidebar-hover'}
       `}
     >
       <span className="mt-0.5 text-base leading-none">{lesson.icon}</span>
