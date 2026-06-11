@@ -57,7 +57,7 @@ export default function Sidebar({ completed, isOpen, onClose, level = 1, lang = 
         <div className="p-5 border-b border-dram-border">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-2xl">💾</span>
-            <h1 className="text-lg font-bold text-dram-text">DRAM Deep Dive</h1>
+            <h1 className="text-lg font-bold text-dram-text">All About DRAM</h1>
           </div>
           <p className="text-xs text-dram-muted">
             {lang === 'zh' ? '交互式教程' : 'Interactive Tutorial'}
