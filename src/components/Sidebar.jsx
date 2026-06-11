@@ -1,17 +1,41 @@
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
 import { lessons } from '../data/lessons'
 import { lessonsL2 } from '../data/lessonsL2'
+import { lessonsZh } from '../data/lessons.zh'
+import { lessonsL2Zh } from '../data/lessonsL2.zh'
 
-export default function Sidebar({ completed, isOpen, onClose, level = 1, light = false, onToggleTheme }) {
-  const activeList = level === 2 ? lessonsL2 : lessons
+export default function Sidebar({ completed, isOpen, onClose, level = 1, lang = 'en', light = false, onToggleTheme }) {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const activeList = level === 2
+    ? (lang === 'zh' ? lessonsL2Zh : lessonsL2)
+    : (lang === 'zh' ? lessonsZh : lessons)
 
   const clusters = level === 2
-    ? [...new Set(lessonsL2.map((l) => l.cluster))].map((c) => ({
+    ? [...new Set(activeList.map((l) => l.cluster))].map((c) => ({
         key: c,
-        name: lessonsL2.find((l) => l.cluster === c).clusterName,
-        lessons: lessonsL2.filter((l) => l.cluster === c),
+        name: activeList.find((l) => l.cluster === c).clusterName,
+        lessons: activeList.filter((l) => l.cluster === c),
       }))
     : null
+
+  function switchLang(targetLang) {
+    const path = location.pathname
+    if (targetLang === 'zh') {
+      if (!path.startsWith('/zh')) {
+        navigate('/zh' + path)
+      }
+    } else {
+      if (path.startsWith('/zh')) {
+        navigate(path.slice(3) || '/')
+      }
+    }
+    onClose()
+  }
+
+  const l1Link = lang === 'zh' ? '/zh/lesson/1' : '/lesson/1'
+  const l2Link = lang === 'zh' ? '/zh/level2/lesson/1' : '/level2/lesson/1'
 
   return (
     <>
@@ -35,13 +59,39 @@ export default function Sidebar({ completed, isOpen, onClose, level = 1, light =
             <span className="text-2xl">💾</span>
             <h1 className="text-lg font-bold text-dram-text">DRAM Deep Dive</h1>
           </div>
-          <p className="text-xs text-dram-muted">Interactive Tutorial</p>
+          <p className="text-xs text-dram-muted">
+            {lang === 'zh' ? '交互式教程' : 'Interactive Tutorial'}
+          </p>
+        </div>
+
+        {/* Language toggle */}
+        <div className="px-5 py-2.5 border-b border-dram-border flex gap-2">
+          <button
+            onClick={() => switchLang('en')}
+            className={`flex-1 text-center text-xs font-semibold py-1.5 rounded-md transition-colors ${
+              lang === 'en'
+                ? 'bg-dram-amber/20 text-dram-amber border border-dram-amber/40'
+                : 'text-dram-muted hover:text-dram-text bg-dram-bg sidebar-hover'
+            }`}
+          >
+            EN
+          </button>
+          <button
+            onClick={() => switchLang('zh')}
+            className={`flex-1 text-center text-xs font-semibold py-1.5 rounded-md transition-colors ${
+              lang === 'zh'
+                ? 'bg-dram-amber/20 text-dram-amber border border-dram-amber/40'
+                : 'text-dram-muted hover:text-dram-text bg-dram-bg sidebar-hover'
+            }`}
+          >
+            中文
+          </button>
         </div>
 
         {/* Level toggle */}
         <div className="px-5 py-3 border-b border-dram-border flex gap-2">
           <Link
-            to="/lesson/1"
+            to={l1Link}
             onClick={onClose}
             className={`flex-1 text-center text-xs font-semibold py-1.5 rounded-md transition-colors ${
               level === 1
@@ -49,10 +99,10 @@ export default function Sidebar({ completed, isOpen, onClose, level = 1, light =
                 : 'text-dram-muted hover:text-dram-text bg-dram-bg sidebar-hover'
             }`}
           >
-            Level 1
+            {lang === 'zh' ? '第一级' : 'Level 1'}
           </Link>
           <Link
-            to="/level2/lesson/1"
+            to={l2Link}
             onClick={onClose}
             className={`flex-1 text-center text-xs font-semibold py-1.5 rounded-md transition-colors ${
               level === 2
@@ -60,14 +110,14 @@ export default function Sidebar({ completed, isOpen, onClose, level = 1, light =
                 : 'text-dram-muted hover:text-dram-text bg-dram-bg sidebar-hover'
             }`}
           >
-            Level 2
+            {lang === 'zh' ? '第二级' : 'Level 2'}
           </Link>
         </div>
 
         {/* Progress */}
         <div className="px-5 py-3 border-b border-dram-border">
           <div className="flex justify-between text-xs text-dram-muted mb-1.5">
-            <span>Progress</span>
+            <span>{lang === 'zh' ? '进度' : 'Progress'}</span>
             <span>{completed.size} / {activeList.length}</span>
           </div>
           <div className="h-1.5 bg-dram-bg rounded-full overflow-hidden">
@@ -92,7 +142,7 @@ export default function Sidebar({ completed, isOpen, onClose, level = 1, light =
               </div>
             ))
           ) : (
-            lessons.map((lesson) => (
+            activeList.map((lesson) => (
               <LessonLink key={lesson.id} lesson={lesson} completed={completed} onClose={onClose} />
             ))
           )}
@@ -101,7 +151,9 @@ export default function Sidebar({ completed, isOpen, onClose, level = 1, light =
         {/* Footer */}
         <div className="p-4 border-t border-dram-border flex items-center justify-between">
           <span className="text-xs text-dram-muted">
-            {level === 2 ? 'Advanced circuit & system depth' : 'Based on ISCA 2002 · Micron · IEEE 2024'}
+            {level === 2
+              ? (lang === 'zh' ? '高级电路与系统深度' : 'Advanced circuit & system depth')
+              : (lang === 'zh' ? '基于 ISCA 2002 · Micron · IEEE 2024' : 'Based on ISCA 2002 · Micron · IEEE 2024')}
           </span>
           <button
             onClick={onToggleTheme}

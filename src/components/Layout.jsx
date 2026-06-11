@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar'
 
-export default function Layout({ completed, markComplete, level = 1 }) {
+export default function Layout({ completed, markComplete, level = 1, lang = 'en' }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [light, setLight] = useState(() => localStorage.getItem('theme') === 'light')
 
@@ -18,6 +18,7 @@ export default function Layout({ completed, markComplete, level = 1 }) {
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         level={level}
+        lang={lang}
         light={light}
         onToggleTheme={() => setLight((l) => !l)}
       />
@@ -44,7 +45,7 @@ export default function Layout({ completed, markComplete, level = 1 }) {
       {/* Main content */}
       <main className="lg:ml-64 min-h-screen">
         <div className="max-w-3xl mx-auto px-6 py-10 pt-20 lg:pt-10">
-          <Outlet context={{ markComplete }} />
+          <Outlet context={{ markComplete, lang }} />
         </div>
       </main>
     </div>
