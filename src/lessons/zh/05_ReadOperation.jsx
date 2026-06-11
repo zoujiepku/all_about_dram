@@ -239,7 +239,7 @@ export default function L05() {
         列选择过程（特定单元高亮），以及数据出现在输出端的过程。
       </p>
 
-      <DRAMArraySim mode="read" />
+      <DRAMArraySim lang="zh" mode="read" />
 
       <LessonNav lessonId={5} onComplete={() => markComplete(5)} lessons={lessonsZh} />
     </div>

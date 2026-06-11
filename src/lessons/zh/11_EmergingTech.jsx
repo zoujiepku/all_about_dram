@@ -1,4 +1,4 @@
-import { useOutletContext } from 'react-router-dom'
+import { useOutletContext, Link } from 'react-router-dom'
 import LessonNav from '../../components/LessonNav'
 import { lessonsZh } from '../../data/lessons.zh'
 
@@ -373,18 +373,25 @@ export default function L11() {
       {/* Completion card */}
       <div className="mt-8 rounded-xl p-6 bg-gradient-to-br from-dram-blue/10 to-dram-green/10 border border-dram-blue/30 text-center">
         <div className="text-4xl mb-3">🎓</div>
-        <h3 className="text-xl font-bold text-dram-text mb-2">第一级完成！</h3>
+        <h3 className="text-xl font-bold text-dram-text mb-2">初阶课程完成！</h3>
         <p className="text-dram-muted text-sm mb-4">
           从 1T1C 存储单元到 HBM3 再到新兴非易失性存储器——你现在已经对现代内存的工作原理
-          有了扎实的全面认识。继续进入第二级，深入学习工程细节。
+          有了扎实的全面认识。继续进入进阶课程，深入学习工程细节。
         </p>
-        <div className="flex flex-wrap gap-2 justify-center text-xs">
+        <div className="flex flex-wrap gap-2 justify-center text-xs mb-5">
           {lessonsZh.map((l) => (
             <span key={l.id} className="px-2 py-1 rounded-full bg-dram-surface text-dram-muted border border-dram-border">
               {l.icon} {l.title}
             </span>
           ))}
         </div>
+        <Link
+          to="/zh/level2/lesson/1"
+          onClick={() => window.scrollTo(0, 0)}
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-dram-blue text-white text-sm font-semibold hover:bg-blue-500 transition-colors"
+        >
+          开始进阶课程 →
+        </Link>
       </div>
 
       <LessonNav lessonId={11} lessons={lessonsZh} onComplete={() => markComplete(11)} />

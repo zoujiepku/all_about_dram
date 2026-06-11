@@ -1,4 +1,5 @@
 import { useOutletContext } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import LessonNav from '../components/LessonNav'
 import { lessons } from '../data/lessons'
 
@@ -385,13 +386,20 @@ export default function L11() {
           From the 1T1C cell all the way to HBM3 and emerging non-volatile memories — you now
           have a solid picture of how modern memory works. Continue to Level 2 for engineering depth.
         </p>
-        <div className="flex flex-wrap gap-2 justify-center text-xs">
+        <div className="flex flex-wrap gap-2 justify-center text-xs mb-5">
           {lessons.map((l) => (
             <span key={l.id} className="px-2 py-1 rounded-full bg-dram-surface text-dram-muted border border-dram-border">
               {l.icon} {l.title}
             </span>
           ))}
         </div>
+        <Link
+          to="/level2/lesson/1"
+          onClick={() => window.scrollTo(0, 0)}
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-dram-blue text-white text-sm font-semibold hover:bg-blue-500 transition-colors"
+        >
+          Start Level 2 →
+        </Link>
       </div>
 
       <LessonNav lessonId={11} onComplete={() => markComplete(11)} />

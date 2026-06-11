@@ -99,7 +99,7 @@ export default function Sidebar({ completed, isOpen, onClose, level = 1, lang = 
                 : 'text-dram-muted hover:text-dram-text bg-dram-bg sidebar-hover'
             }`}
           >
-            {lang === 'zh' ? '第一级' : 'Level 1'}
+            {lang === 'zh' ? '初阶' : 'Level 1'}
           </Link>
           <Link
             to={l2Link}
@@ -110,7 +110,7 @@ export default function Sidebar({ completed, isOpen, onClose, level = 1, lang = 
                 : 'text-dram-muted hover:text-dram-text bg-dram-bg sidebar-hover'
             }`}
           >
-            {lang === 'zh' ? '第二级' : 'Level 2'}
+            {lang === 'zh' ? '进阶' : 'Level 2'}
           </Link>
         </div>
 

@@ -118,7 +118,7 @@ export default function L04() {
         <p className="text-dram-muted mt-2">数十亿个 1T1C 单元如何被组织成一个高速、可寻址的阵列</p>
       </div>
 
-      <DRAMArraySim />
+      <DRAMArraySim lang="zh" />
 
       <h2>从单个单元到二维阵列</h2>
       <p>

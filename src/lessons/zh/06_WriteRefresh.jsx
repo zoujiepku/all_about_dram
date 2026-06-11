@@ -256,7 +256,7 @@ export default function L06() {
         消耗过程，然后点击<strong>刷新行</strong>恢复电荷。
       </p>
 
-      <DRAMArraySim />
+      <DRAMArraySim lang="zh" />
 
       <LessonNav lessonId={6} onComplete={() => markComplete(6)} lessons={lessonsZh} />
     </div>
