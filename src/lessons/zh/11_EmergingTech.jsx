@@ -220,7 +220,7 @@ export default function L11() {
   return (
     <div className="lesson-prose">
       <div className="mb-6">
-        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">模块 11</span>
+        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Module 11</span>
         <h1 className="text-3xl font-bold text-dram-text mt-1">新兴存储技术</h1>
         <p className="text-dram-muted mt-2">ReRAM、FeRAM、MRAM、CXL 以及内存的未来</p>
       </div>

@@ -8,13 +8,13 @@ export default function L2_06() {
   return (
     <div className="lesson-prose">
       <div className="mb-6">
-        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · 第 06 模块 · 模块组 B：系统架构</span>
+        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · Module 06 · Cluster B: System Architecture</span>
         <h1 className="text-3xl font-bold text-dram-text mt-1">Bank 并行性与 tFAW</h1>
-        <p className="text-dram-muted mt-2">四激活窗口约束、DDR4/5 中的 Bank 组，以及内存级并行性</p>
+        <p className="text-dram-muted mt-2">tFAW 四激活窗口约束、DDR4/5 中的 Bank 组，以及存储级并行</p>
       </div>
 
       <div className="rounded-lg p-4 bg-dram-blue/5 border border-dram-blue/20 text-sm text-dram-muted mb-6">
-        <strong className="text-dram-blue">Level 1 关联：</strong>在第 7 模块（时序参数）中，你已了解
+        <strong className="text-dram-blue">与 Level 1 的联系：</strong>在第 7 模块（时序参数）中，你已了解
         tRRD（Bank 激活之间的行到行延迟）。tFAW 是叠加在 tRRD 之上的全局约束——
         无论每个 Bank 的独立时序如何，它限制了在短时间窗口内可以打开的 Bank 数量。
       </div>
@@ -33,15 +33,15 @@ export default function L2_06() {
         <li>对 Bank 0 进行预充电 → 在 Bank 0 预充电期间，Bank 1 继续响应请求</li>
       </ul>
       <p>
-        这种<strong>内存级并行性（MLP，Memory-Level Parallelism）</strong>是随机访问工作负载
+        这种<strong>存储级并行（MLP，Memory-Level Parallelism）</strong>是随机访问工作负载
         中主要的吞吐量提升机制，因为每个请求都会命中不同的 Bank。
       </p>
 
       <h2>tFAW：四激活窗口</h2>
       <p>
-        行激活会从电源网络中汲取大量浪涌电流（字线和感应放大器同时充电）。
+        行激活会从电源网络中汲取大量浪涌电流（字线和灵敏放大器同时充电）。
         如果在短时间内有过多 Bank 同时激活，叠加的浪涌电流会在 Vdd 上产生
-        <strong> IR 压降</strong>，可能导致感应放大器工作异常，进而引发数据错误。
+        <strong> IR 压降</strong>，可能导致灵敏放大器工作异常，进而引发数据错误。
       </p>
       <p>
         JEDEC 通过 tFAW（四激活窗口）来解决这一问题：<em>在任意长度为 tFAW 的滚动时间窗口内，
@@ -61,7 +61,7 @@ export default function L2_06() {
       </p>
       <ul>
         <li><strong>tCCD_L</strong>（同一 Bank 组）：5–8 ck——组内共享的内部 IO 路径在下一次列访问前需要更长的稳定时间</li>
-        <li><strong>tCCD_S</strong>（不同 Bank 组）：4 ck——每个 Bank 组拥有独立的 IO 路径，跨组的背靠背访问可以更紧密地调度</li>
+        <li><strong>tCCD_S</strong>（不同 Bank 组）：4 ck——每个 Bank 组拥有独立的 IO 路径，跨组的连续访问可以更紧密地调度</li>
       </ul>
       <p>
         记忆口诀：<em>L = Long（长）= 同组；S = Short（短）= 不同组</em>。

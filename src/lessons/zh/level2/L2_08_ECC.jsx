@@ -16,14 +16,14 @@ export default function L2_08() {
       <div className="rounded-lg p-4 bg-dram-blue/5 border border-dram-blue/20 text-sm text-dram-muted mb-6">
         <strong className="text-dram-blue">Level 1 关联：</strong>在第 9 模块（现代 DRAM）中，你了解到
         DDR5 内置了片上 ECC。本节将从头构建汉明码：需要多少个校验位、
-        综合征（Syndrome）如何定位错误，以及为什么 Chipkill 需要 ×4 位宽的芯片。
+        校验子（Syndrome）如何定位错误，以及为什么 Chipkill 需要 ×4 位宽的芯片。
       </div>
 
       <ECCSim />
 
       <h2>为什么 64 位数据需要 8 个校验位？</h2>
       <p>
-        要为 n 位数据构建 <strong>SECDED（单比特纠错、双比特检错）</strong>编码，
+        要为 n 位数据构建 <strong>SECDED（单错误纠正、双错误检测）</strong>编码，
         需要 r 个校验位满足：
       </p>
       <p>
@@ -39,7 +39,7 @@ export default function L2_08() {
       <h2>汉明码的构造方法</h2>
       <p>
         校验位放置在 2 的幂次位置（1、2、4、8、16、32、64）。每个校验位 P_i
-        负责校验所有二进制表示中第 i 位为 1 的比特位置：
+        负责校验所有二进制表示中第 i 位为 1 的各比特位置：
       </p>
       <ul>
         <li>P_0（位置 1）覆盖位置 1、3、5、7、9、11、……（位置的第 0 位为 1）</li>
@@ -48,12 +48,12 @@ export default function L2_08() {
         <li>……依此类推</li>
       </ul>
       <p>
-        每个 P_i 的取值使其所覆盖的全部比特（包括 P_i 自身）的 XOR 结果为零。
-        接收端重新计算所有校验，得到<strong>综合征（Syndrome）</strong>。
-        综合征各位组成的二进制数直接给出出错比特的位置。
+        每个 P_i 的取值使其所覆盖的全部位（包括 P_i 自身）的 XOR 结果为零。
+        接收端重新计算所有校验，得到<strong>校验子（Syndrome）</strong>。
+        校验子各位组成的二进制数直接给出出错位的位置编号。
       </p>
       <p>
-        示例：综合征 = 0b0001011 = 十进制 11 → 第 11 位出错 → 将其翻转即可纠正。
+        示例：校验子 = 0b0001011 = 十进制 11 → 第 11 位出错 → 将其翻转即可纠正。
       </p>
 
       <h2>Chipkill：容忍整颗芯片失效</h2>
@@ -84,12 +84,12 @@ export default function L2_08() {
         两者组合提供了两层独立的纠错保护。
       </p>
 
-      <h2>内存扫描（Memory Scrubbing）</h2>
+      <h2>内存擦洗（Memory Scrubbing）</h2>
       <p>
         即使有 ECC，未纠正的错误仍会随着存储单元缓慢漏电或宇宙射线事件引发的软错误而不断积累。
-        <strong>内存扫描</strong>是一种后台进程，定期读取每个内存地址，纠正所有单比特错误，
-        并将纠正后的数据回写。JEDEC 建议服务器环境每 <strong>24–72 小时</strong>执行一次扫描。
-        扫描带来的带宽开销通常低于 &lt;0.1%。
+        <strong>内存擦洗</strong>是一种后台进程，定期读取每个内存地址，纠正所有单比特错误，
+        并将纠正后的数据回写。JEDEC 建议服务器环境每 <strong>24–72 小时</strong>执行一次擦洗。
+        擦洗带来的带宽开销通常低于 &lt;0.1%。
       </p>
 
       <LessonNav lessonId={8} onComplete={() => markComplete(8)} lessons={lessonsL2Zh} />

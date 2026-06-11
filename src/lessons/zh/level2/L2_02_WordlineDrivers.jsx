@@ -10,7 +10,7 @@ export default function L2_02() {
       <div className="mb-6">
         <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · Module 02 · Cluster A: Circuit Design</span>
         <h1 className="text-3xl font-bold text-dram-text mt-1">字线与位线驱动器</h1>
-        <p className="text-dram-muted mt-2">电压自举、位线预充电、负字线电压以及存储单元干扰</p>
+        <p className="text-dram-muted mt-2">电荷泵升压、位线预充电、负字线电压以及存储单元干扰</p>
       </div>
 
       <div className="rounded-lg p-4 bg-dram-blue/5 border border-dram-blue/20 text-sm text-dram-muted mb-6">
@@ -28,7 +28,7 @@ export default function L2_02() {
       </p>
       <p>
         当 Vdd = 1.2 V、NMOS 阈值电压约为 0.5 V（含体效应）时，字线电压至少需达到 1.7 V。实际设计中采用
-        <strong>Vpp = 2.5–3.0 V</strong> 以提供裕量并应对工艺偏差。Vpp 由片上<strong>电荷泵</strong>生成，将 Vdd 自举至更高电压。
+        <strong>Vpp = 2.5–3.0 V</strong> 以提供裕量并应对工艺偏差。Vpp 由片上<strong>电荷泵（升压电路）</strong>生成，将 Vdd 升至所需电压。
       </p>
       <p>
         在 20 nm 以下工艺节点，NMOS 阈值电压降至约 0.3 V，所需 Vpp 随之降低，但短沟道效应和 DIBL（漏致势垒降低）带来了新的设计约束。
@@ -45,7 +45,7 @@ export default function L2_02() {
         <li>一个 NMOS 将 BL 直接连接至 BLB（均衡）</li>
       </ul>
       <p>
-        均衡晶体管至关重要：无论前一周期留下何种残余电压差，它都能强制使 BL = BLB，消除可能导致误判的回踢噪声。
+        均衡晶体管至关重要：无论前一周期留下何种残余电压差，它都能强制使 BL = BLB，消除可能导致误判的残余噪声。
       </p>
 
       <h2>负字线电压（nWL）</h2>

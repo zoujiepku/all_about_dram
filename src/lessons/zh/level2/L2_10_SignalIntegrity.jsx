@@ -8,7 +8,7 @@ export default function L2_10() {
   return (
     <div className="lesson-prose">
       <div className="mb-6">
-        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · 模块 10 · D 单元：信号完整性与 I/O</span>
+        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · 第 10 模块 · 模块组 D：信号完整性与 I/O</span>
         <h1 className="text-3xl font-bold text-dram-text mt-1">DDR 信号完整性</h1>
         <p className="text-dram-muted mt-2">Fly-by 拓扑、写均衡、读 DQS 对齐、ZQ 校准与串扰</p>
       </div>
@@ -53,7 +53,7 @@ export default function L2_10() {
 
       <h2>串扰与保护间距</h2>
       <p>
-        DDR 总线在多层 PCB 上以密集走线高速传输。相邻信号线构成耦合传输线：<strong>主动线（aggressor）</strong>切换时，通过容性（前向）和感性（后向）耦合在平行的<strong>受害线（victim）</strong>上感应出电压尖峰。
+        DDR 总线在多层 PCB 上以密集走线高速传输。相邻信号线构成耦合传输线：<strong>侵扰线（aggressor）</strong>切换时，通过容性（前向）和感性（后向）耦合在平行的<strong>受害线（victim）</strong>上感应出电压尖峰。
       </p>
       <p>
         在 DDR5-6400（3.2 GHz）下，串扰感应噪声可达 30–50 mV——相对于约 120 mV 的电压摆幅而言不容忽视。PCB 设计工程师通过<strong>保护间距</strong>加以应对：在关键信号对之间增加额外间距，并采用差分布线（CK+/CK−、DQS+/DQS−）以抵消共模噪声。

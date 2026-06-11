@@ -9,8 +9,8 @@ function GenerationTable() {
     { gen: 'EDO DRAM', year: '1994', voltage: '5V', speed: '40–66 MT/s', prefetch: '1n', bw: '~0.4 GB/s', key: '输出锁存——CAS 流水线，带宽提升约 40%' },
     { gen: 'SDRAM', year: '1996', voltage: '3.3V', speed: '66–133 MT/s', prefetch: '1n', bw: '~1 GB/s', key: '引入同步时钟——突发模式、命令队列' },
     { gen: 'DDR', year: '2000', voltage: '2.5V', speed: '200–400 MT/s', prefetch: '2n', bw: '~3.2 GB/s', key: '时钟双沿传输——2n 预取缓冲区' },
-    { gen: 'DDR2', year: '2003', voltage: '1.8V', speed: '400–1066 MT/s', prefetch: '4n', bw: '~8.5 GB/s', key: '4n 预取、ODT 片上终端、更低电压、更快 I/O' },
-    { gen: 'DDR3', year: '2007', voltage: '1.5V', speed: '800–2133 MT/s', prefetch: '8n', bw: '~17 GB/s', key: '8n 预取、飞越式布线拓扑、XMP 超频' },
+    { gen: 'DDR2', year: '2003', voltage: '1.8V', speed: '400–1066 MT/s', prefetch: '4n', bw: '~8.5 GB/s', key: '4n 预取、片上终端（ODT）、更低电压、更快 I/O' },
+    { gen: 'DDR3', year: '2007', voltage: '1.5V', speed: '800–2133 MT/s', prefetch: '8n', bw: '~17 GB/s', key: '8n 预取、飞越拓扑（菊花链）、XMP 超频' },
     { gen: 'DDR4', year: '2014', voltage: '1.2V', speed: '1600–3200 MT/s', prefetch: '8n', bw: '~25 GB/s', key: 'Bank Group、POD 信号标准、逐引脚校准' },
     { gen: 'DDR5', year: '2021', voltage: '1.1V', speed: '4800–8400 MT/s', prefetch: '16n', bw: '~67 GB/s', key: '2 个子通道、片上 ECC、模组集成 PMIC、按 Bank 刷新' },
   ]
@@ -193,10 +193,9 @@ export default function L08() {
 
       <h3>DDR → DDR2/3：更快 I/O，更宽预取</h3>
       <p>
-        DDR2 将预取扩展至 4n，I/O 频率推至 SDRAM 参考频率的 2 倍。同时新增片上
-        终端（ODT）以改善信号完整性——此前由内存控制器在外部管理终端。DDR3 扩展至
-        8n 预取，并在 DIMM 上采用飞越式布线（菊花链拓扑代替 T 型拓扑），以减少
-        高频下的信号反射。
+        DDR2 将预取扩展至 4n，I/O 频率推至 SDRAM 参考频率的 2 倍。同时新增片上终端（ODT）
+        以改善信号完整性——此前由内存控制器在外部管理终端。DDR3 扩展至 8n 预取，
+        并在 DIMM 上采用飞越拓扑（菊花链代替 T 型拓扑），以减少高频下的信号反射。
       </p>
 
       <h3>DDR3 → DDR4（2007–2014）：Bank Group</h3>

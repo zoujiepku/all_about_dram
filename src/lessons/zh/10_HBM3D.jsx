@@ -167,7 +167,7 @@ export default function L10() {
   return (
     <div className="lesson-prose">
       <div className="mb-6">
-        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">模块 10</span>
+        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Module 10</span>
         <h1 className="text-3xl font-bold text-dram-text mt-1">HBM 与 3D DRAM</h1>
         <p className="text-dram-muted mt-2">垂直堆叠芯片，实现 TB/s 级带宽</p>
       </div>

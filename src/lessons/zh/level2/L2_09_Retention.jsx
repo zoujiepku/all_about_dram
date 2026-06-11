@@ -8,7 +8,7 @@ export default function L2_09() {
   return (
     <div className="lesson-prose">
       <div className="mb-6">
-        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · 模块 09 · C 单元：可靠性与安全性</span>
+        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · 第 09 模块 · 模块组 C：可靠性与安全性</span>
         <h1 className="text-3xl font-bold text-dram-text mt-1">可变保持时间与可靠性</h1>
         <p className="text-dram-muted mt-2">VRT 单元、Arrhenius 温度模型、FIT 率与保持时间测试</p>
       </div>
@@ -59,10 +59,10 @@ export default function L2_09() {
 
       <h2>FIT 率与系统可靠性</h2>
       <p>
-        可靠性以 <strong>FIT（Failures in Time，时间失效率）</strong>量化：每 10^9 器件小时内的预期失效次数。典型 DRAM 硬失效 FIT 率约为 1–10，由宇宙射线中子引起的软错误率约为 1000 FIT（次级中子翻转存储节点中的位）。
+        可靠性以 <strong>FIT（Failure In Time）</strong>量化：每 10^9 器件小时内的预期失效次数。典型 DRAM 硬失效 FIT 率约为 1–10，由宇宙射线中子引起的软错误率约为 1000 FIT（次级中子翻转存储节点中的位）。
       </p>
       <p>
-        对于搭载 256 GB DRAM 的服务器（≈ 256×10^9 字节 × 8 位/字节 = ~2×10^12 位，即约 2×10^6 Mb），若软错误率为 1 FIT/Mb，总 FIT 约为 2×10^6——即每台服务器每 500 个工作小时发生约一次未纠正错误。对于 10,000 台服务器的集群，约每小时出现 20 次全局错误，由此可见 ECC 和内存扫描（memory scrubbing）在数据中心部署中不可或缺。
+        对于搭载 256 GB DRAM 的服务器（≈ 256×10^9 字节 × 8 位/字节 = ~2×10^12 位，即约 2×10^6 Mb），若软错误率为 1 FIT/Mb，总 FIT 约为 2×10^6——即每台服务器每 500 个工作小时发生约一次未纠正错误。对于 10,000 台服务器的集群，约每小时出现 20 次全局错误，由此可见 ECC 和内存擦洗（memory scrubbing）在数据中心部署中不可或缺。
       </p>
 
       <h2>保持时间测试方法</h2>

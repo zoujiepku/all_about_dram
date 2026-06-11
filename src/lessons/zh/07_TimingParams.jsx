@@ -193,7 +193,7 @@ export default function L07() {
         具有更小的绝对延迟。应始终换算为纳秒：
       </p>
       <div className="bg-slate-800 rounded-lg p-4 font-mono text-sm my-4 text-dram-green">
-        <div>周期时间 = 2000 ms ÷ (MT/s 速率)</div>
+        <div>周期时间 = 2000 ns ÷ (MT/s 速率)</div>
         <div className="text-dram-muted mt-1">DDR4-3200：2000 ÷ 3200 = 0.625 ns/周期</div>
         <div className="text-dram-muted">DDR5-6400：2000 ÷ 6400 = 0.3125 ns/周期</div>
       </div>

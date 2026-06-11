@@ -8,13 +8,13 @@ export default function L2_05() {
   return (
     <div className="lesson-prose">
       <div className="mb-6">
-        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · 第 05 模块 · 模块组 B：系统架构</span>
+        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · Module 05 · Cluster B: System Architecture</span>
         <h1 className="text-3xl font-bold text-dram-text mt-1">Rank、DIMM 与通道</h1>
         <p className="text-dram-muted mt-2">72 位总线结构、Rank 复用、tRTRS 时序，以及双通道交织</p>
       </div>
 
       <div className="rounded-lg p-4 bg-dram-blue/5 border border-dram-blue/20 text-sm text-dram-muted mb-6">
-        <strong className="text-dram-blue">Level 1 关联：</strong>在第 9 模块（现代 DRAM）中，你已经了解到
+        <strong className="text-dram-blue">与 Level 1 的联系：</strong>在第 9 模块（现代 DRAM）中，你已经了解到
         DDR5 拥有两条 32 位子通道，以及 DIMM 使用 72 位总线。本节将深入讲解其电气与时序细节：
         多颗芯片和多个 Rank 如何共享总线，以及如何防止它们之间的冲突。
       </div>

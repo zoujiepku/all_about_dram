@@ -8,7 +8,7 @@ export default function L2_11() {
   return (
     <div className="lesson-prose">
       <div className="mb-6">
-        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · 模块 11 · D 单元：信号完整性与 I/O</span>
+        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · 第 11 模块 · 模块组 D：信号完整性与 I/O</span>
         <h1 className="text-3xl font-bold text-dram-text mt-1">I/O 标准与终端匹配</h1>
         <p className="text-dram-muted mt-2">SSTL-1.2 与 POD-1.2 对比、片上终端（ODT）、SSO 噪声与阻抗匹配</p>
       </div>

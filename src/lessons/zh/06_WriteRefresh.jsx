@@ -82,7 +82,7 @@ function RefreshMathCard() {
           <span className="text-dram-blue">550 ns（需刷新更多行）</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-dram-muted">有效开销（全 Bank 刷新）：</span>
+          <span className="text-dram-muted">有效开销（全 Bank 同步刷新）：</span>
           <span className="text-dram-amber">350 ns ÷ 7800 ns ≈ 4.5%</span>
         </div>
       </div>
@@ -153,7 +153,7 @@ export default function L06() {
         关闭字线，导致部分写入——产生数据损坏。
       </p>
 
-      <h3>写列屏蔽（DM / DBI）</h3>
+      <h3>写数据屏蔽（DM / DBI）</h3>
       <p>
         DDR3/4/5 支持只写入突发中的特定字节。<strong>DM</strong>（数据屏蔽）
         引脚与数据同步采样，对被屏蔽的字节抑制写驱动器——这些存储单元不被写入。
@@ -228,9 +228,9 @@ export default function L06() {
       <h2>刷新计算</h2>
       <RefreshMathCard />
 
-      <h2>全 Bank 刷新 vs 按 Bank 刷新</h2>
+      <h2>全 Bank 同步刷新 vs 按 Bank 刷新</h2>
       <p>
-        传统 DRAM 使用<strong>全 Bank 刷新（ABR）</strong>：当 REF 命令到来时，
+        传统 DRAM 使用<strong>全 Bank 同步刷新</strong>：当 REF 命令到来时，
         所有 Bank 同时刷新相同的行。在 tRFC 期间（DDR5 32 Gb 最高达 550 ns），
         所有 Bank 均不可用，为 CPU 带来规律性的死区。
       </p>

@@ -10,7 +10,7 @@ export default function L2_03() {
       <div className="mb-6">
         <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · Module 03 · Cluster A: Circuit Design</span>
         <h1 className="text-3xl font-bold text-dram-text mt-1">行列译码器设计</h1>
-        <p className="text-dram-muted mt-2">基于 NAND 的行译码、地址预译码以及列通过门多路选择器</p>
+        <p className="text-dram-muted mt-2">基于 NAND 的行译码、地址预译码以及列选通门多路选择</p>
       </div>
 
       <div className="rounded-lg p-4 bg-dram-blue/5 border border-dram-blue/20 text-sm text-dram-muted mb-6">
@@ -47,23 +47,23 @@ export default function L2_03() {
         <div>Row k  → NAND(predecode_21[k&gt;&gt;1], predecode_0[k&amp;1])</div>
       </div>
 
-      <h2>列译码器：通过门多路选择器</h2>
+      <h2>列译码器：选通门多路选择</h2>
       <p>
-        行激活后，打开行中的 8192 条以上列线均驱动各自的灵敏放大器。列地址通过<strong>列通过门阵列</strong>选取一个或多个灵敏放大器输出：
+        行激活后，该行中的 8192 条以上位线均驱动各自的灵敏放大器。列地址通过<strong>列选通门阵列</strong>从中选取一个或多个灵敏放大器输出：
       </p>
       <ul>
         <li>列译码器将列地址转换为独热（one-hot）选通信号</li>
-        <li>每列灵敏放大器的输出经过一个 NMOS 通过晶体管</li>
-        <li>只有被选中的通过晶体管导通，将数据路由至 I/O 锁存器</li>
+        <li>每列灵敏放大器的输出经过一个 NMOS 选通晶体管</li>
+        <li>只有被选中的选通晶体管导通，将数据路由至 I/O 锁存器</li>
         <li>DDR5 的 16n 预取意味着每个芯片同时译码 16 个列地址以输出 16 位数据</li>
       </ul>
 
       <h2>热载流子应力与译码器可靠性</h2>
       <p>
-        字线驱动器承受着 DRAM 中最高的电压（在低于 Vdd 的工艺节点上 Vpp ≈ 2.5–3 V）。这会在字线驱动器 NMOS 的漏极产生<strong>热载流子注入（HCI）</strong>应力，经过数十亿次写操作后逐渐使其阈值电压发生漂移。
+        字线驱动器承受着 DRAM 中最高的电压（在核心电压低于 Vdd 的工艺节点上 Vpp ≈ 2.5–3 V）。这会在字线驱动器 NMOS 的漏端产生<strong>热载流子注入（HCI）</strong>应力，经过数十亿次激活操作后逐渐使阈值电压发生漂移。
       </p>
       <p>
-        可靠性工程师使用 <strong>NBTI（负偏置温度不稳定性）</strong>和 HCI 模型，确保器件在额定电压和温度下的 10 年使用寿命。主要缓解措施包括：限制 Vpp 幅度、在驱动器中使用更长沟道的 PMOS，以及在测试阶段进行可靠性筛查。
+        可靠性工程师使用 <strong>NBTI（负偏置温度不稳定性）</strong>和 HCI 模型，确保器件在额定电压和温度下满足 10 年使用寿命要求。主要缓解措施包括：限制 Vpp 幅度、在驱动器中使用较长沟道的 PMOS，以及在测试阶段进行可靠性筛查。
       </p>
 
       <div className="rounded-lg overflow-hidden border border-dram-border text-xs mt-4">

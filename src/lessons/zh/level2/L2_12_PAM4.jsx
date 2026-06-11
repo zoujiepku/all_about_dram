@@ -8,7 +8,7 @@ export default function L2_12() {
   return (
     <div className="lesson-prose">
       <div className="mb-6">
-        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · 模块 12 · D 单元：信号完整性与 I/O</span>
+        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · 第 12 模块 · 模块组 D：信号完整性与 I/O</span>
         <h1 className="text-3xl font-bold text-dram-text mt-1">PAM4 与均衡技术</h1>
         <p className="text-dram-muted mt-2">NRZ 与 PAM4 编码对比、信噪比代价、CTLE/DFE 均衡，以及眼图分析</p>
       </div>

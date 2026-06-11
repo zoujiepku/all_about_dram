@@ -128,8 +128,8 @@ export default function L04() {
         再激活一条列路径（选中列）。
       </p>
       <p>
-        以典型的 DDR4 芯片（例如 8 Gb x8）为例，每个 bank 有 <strong>65,536 行 × 8,192 列</strong>，
-        每 bank 容量为 512 Mb。16 个 bank 合计 <strong>8 Gb</strong>/芯片。
+        以典型的 DDR4 芯片（例如 8 Gb x8）为例，每个 Bank 有 <strong>65,536 行 × 8,192 列</strong>，
+        每 Bank 容量为 512 Mb。16 个 Bank 合计 <strong>8 Gb</strong>/芯片。
         一条 16 GB DDR4 DIMM 每个 rank 使用 8 颗这样的芯片，组成 64 位宽的总线
         （每颗 x8 芯片提供 8 位），两个 rank 共 16 GB——每个 rank 还额外配一颗 ECC 芯片。
       </p>
@@ -217,21 +217,21 @@ export default function L04() {
 
       <h2>Bank：独立的子阵列</h2>
       <p>
-        单个阵列每次只能服务一行——在同一 bank 中激活第二行，必须先关闭（预充电）第一行。
-        为允许内存请求流水线化，现代 DRAM 芯片被划分为多个 <strong>bank</strong>：
+        单个阵列每次只能服务一行——在同一 Bank 中激活第二行，必须先关闭（预充电）第一行。
+        为允许内存请求流水线化，现代 DRAM 芯片被划分为多个 <strong>Bank</strong>：
         物理上相互独立的阵列，各自拥有行译码器、灵敏放大器和已激活行寄存器。
       </p>
       <ul>
-        <li>DDR3：每芯片 8 个 bank</li>
-        <li>DDR4：16 个 bank（4 个 bank group × 每组 4 个 bank）。各 bank group 拥有独立的内部数据通路，
-            允许对不同 bank group 进行背靠背列访问，最小间隔仅需 tCCD_S = 4 周期，
-            而同一 bank group 内需 tCCD_L = 5–8 周期。</li>
-        <li>DDR5：32 个 bank（每个子通道 8 个 bank group × 每组 4 个 bank）</li>
+        <li>DDR3：每芯片 8 个 Bank</li>
+        <li>DDR4：16 个 Bank（4 个 Bank Group × 每组 4 个 Bank）。各 Bank Group 拥有独立的内部数据通路，
+            允许对不同 Bank Group 进行背靠背列访问，最小间隔仅需 tCCD_S = 4 周期，
+            而同一 Bank Group 内需 tCCD_L = 5–8 周期。</li>
+        <li>DDR5：32 个 Bank（每个子通道 8 个 Bank Group × 每组 4 个 Bank）</li>
       </ul>
       <p>
-        当 bank A 在等待 tRAS（行必须保持激活的最短时间）时，内存控制器可以激活 bank B 的一行、
-        发出 CAS 命令并获取数据——将 bank A 的延迟隐藏在 bank B 的有效工作中。
-        这就是<strong>bank 级并行</strong>，也是内存控制器最大化吞吐量的主要技术手段。
+        当 Bank A 在等待 tRAS（行必须保持激活的最短时间）时，内存控制器可以激活 Bank B 的一行、
+        发出 CAS 命令并获取数据——将 Bank A 的延迟隐藏在 Bank B 的有效工作中。
+        这就是<strong>Bank 级并行</strong>，也是内存控制器最大化吞吐量的主要技术手段。
       </p>
 
       <LessonNav lessonId={4} lessons={lessonsZh} onComplete={() => markComplete(4)} />

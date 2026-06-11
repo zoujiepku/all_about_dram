@@ -10,11 +10,11 @@ export default function L2_01() {
       <div className="mb-6">
         <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Level 2 · Module 01 · Cluster A: Circuit Design</span>
         <h1 className="text-3xl font-bold text-dram-text mt-1">灵敏放大器设计</h1>
-        <p className="text-dram-muted mt-2">交叉耦合反相器锁存、电荷共享 ΔV 以及噪声裕量</p>
+        <p className="text-dram-muted mt-2">交叉耦合锁存与再生、电荷共享 ΔV 以及噪声容限</p>
       </div>
 
       <div className="rounded-lg p-4 bg-dram-blue/5 border border-dram-blue/20 text-sm text-dram-muted mb-6">
-        <strong className="text-dram-blue">与 Level 1 的联系：</strong>在第 4 模块（阵列组织）中，你学到了灵敏放大器（SA）用于检测存储单元连接到位线后留下的微小电压摆幅。本节深入 SA 内部：它使用多少个晶体管、如何保证可靠性，以及如何量化噪声裕量。
+        <strong className="text-dram-blue">与 Level 1 的联系：</strong>在第 4 模块（阵列组织）中，你学到了灵敏放大器（SA）用于检测存储单元连接到位线后留下的微小电压摆幅。本节深入 SA 内部：它使用多少个晶体管、如何保证可靠性，以及如何量化噪声容限。
       </div>
 
       <SenseAmpSim />
@@ -46,7 +46,7 @@ export default function L2_01() {
 
       <h2>交叉耦合锁存器</h2>
       <p>
-        DRAM 灵敏放大器是一个<strong>交叉耦合反相器锁存器</strong>——两个 CMOS 反相器的输入和输出互相交换：
+        DRAM 灵敏放大器是一个<strong>交叉耦合锁存器</strong>——两个 CMOS 反相器的输入和输出互相交叉连接：
       </p>
       <ul>
         <li>M3（PMOS）+ M1（NMOS）构成反相器 1：输入 = BLB，输出 = BL</li>
@@ -60,13 +60,13 @@ export default function L2_01() {
         SAP/SAN 同时触发时，两个反相器的电源均接通。电压略高的一侧（BL = Vdd/2 + ΔV）通过正反馈向 Vdd 拉升；电压较低的一侧（BLB = Vdd/2）被拉向 GND。锁存器在 1–2 ns 内完成判决。
       </p>
 
-      <h2>噪声裕量与失调</h2>
+      <h2>噪声容限与失调</h2>
       <p>
         最小可检测 ΔV 并非零——M1/M2 和 M3/M4 之间的晶体管失配会产生等效输入失调电压
         V_os ≈ 5–20 mV。若 ΔV &lt; V_os，锁存器可能向错误方向判决，导致读出比特翻转。
       </p>
       <p>
-        <strong>自动调零失调消除：</strong>现代 DRAM 在 BLB 侧接入一个"哑元"存储单元，其存储电荷精确为半 Vdd，从而提供干净的参考电压。更先进的技术在每次灵敏周期前对锁存失调进行采样并消除（自动调零），使 ΔV 最小可至 20–30 mV 仍能正常工作。
+        <strong>失调消除与自动调零：</strong>现代 DRAM 在 BLB 侧接入一个哑元（dummy）存储单元，其存储电荷精确为半 Vdd，从而提供干净的参考电压。更先进的方案在每次感应周期前对锁存失调进行采样并消除（自动调零，auto-zeroing），使 ΔV 最小可至 20–30 mV 仍能正常工作。
       </p>
 
       <h2>SA 触发时序</h2>

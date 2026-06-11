@@ -182,7 +182,7 @@ export default function L09() {
   return (
     <div className="lesson-prose">
       <div className="mb-6">
-        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">模块 09</span>
+        <span className="text-xs font-mono text-dram-blue uppercase tracking-widest">Module 09</span>
         <h1 className="text-3xl font-bold text-dram-text mt-1">现代 DRAM</h1>
         <p className="text-dram-muted mt-2">DDR5、LPDDR5、GDDR6、HBM3 — 四大内存家族及其适用场景</p>
       </div>
@@ -194,9 +194,9 @@ export default function L09() {
       <h3>每 DIMM 两条子通道</h3>
       <p>
         DDR4 每块 DIMM 只有一条 64 位数据总线。DDR5 将其拆分为两条独立的 32 位子通道，
-        各自拥有独立的命令/地址总线、DQS 选通信号和 DM 信号。
-        这样做的原因：更窄的总线可以独立调度——控制器可以同时向子通道 A 发送写操作、向子通道 B
-        发送读操作。在不增加物理走线数量的前提下，有效 Bank 并行度几乎翻倍。
+        各自拥有独立的命令/地址总线、DQS 选通信号和 DM 信号。更窄的总线可独立调度——
+        控制器可同时向子通道 A 发送写操作、向子通道 B 发送读操作。
+        在不增加物理走线数量的前提下，有效 Bank 并行度几乎翻倍。
       </p>
 
       <DDRBusDiagram />

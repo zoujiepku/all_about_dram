@@ -8,7 +8,7 @@ function HierarchyTable() {
     { level: 'Registers（寄存器）', size: '1–4 KB', latency: '< 1 ns', tech: '触发器（SRAM）', bw: '> 1 TB/s', cost: '~$1000/GB', note: 'CPU 指令直接寻址 — AX、RBX 等' },
     { level: 'L1 Cache', size: '32–64 KB/核', latency: '~1–4 ns（4–16 周期）', tech: 'SRAM（6T 单元）', bw: '~200 GB/s', cost: '~$200/MB', note: '指令+数据分离；每核私有；4 路至 8 路组相联' },
     { level: 'L2 Cache', size: '256 KB–2 MB/核', latency: '~4–12 ns（10–40 周期）', tech: 'SRAM（6T 单元）', bw: '~100 GB/s', cost: '~$100/MB', note: '统一缓存；Intel 平台每核私有；4 路至 16 路组相联' },
-    { level: 'L3 Cache（LLC）', size: '8–64 MB（共享）', latency: '~20–50 ns（40–150 周期）', tech: 'SRAM（6T 单元，部分用 MRAM）', bw: '~50 GB/s', cost: '~$20/MB', note: '所有核共享；通常分 bank，每核对应独立分片' },
+    { level: 'L3 Cache（LLC）', size: '8–64 MB（共享）', latency: '~20–50 ns（40–150 周期）', tech: 'SRAM（6T 单元，部分用 MRAM）', bw: '~50 GB/s', cost: '~$20/MB', note: '所有核共享；通常分 Bank，每核对应独立分片' },
     { level: 'Main Memory（DRAM）', size: '4–256 GB', latency: '~60–100 ns（200–300 周期）', tech: 'DRAM（1T1C 单元）', bw: '25–96 GB/s', cost: '~$0.003/MB', note: '字节寻址；每 7.8 µs 刷新一次；本课程重点' },
     { level: 'NVMe SSD', size: '256 GB–8 TB', latency: '~100 µs', tech: '3D NAND Flash', bw: '5–14 GB/s', cost: '~$0.0001/MB', note: '持久化存储；块寻址（最小 4 KB）；需要操作系统页缓存' },
     { level: 'HDD（机械硬盘）', size: '1–20 TB', latency: '~5–10 ms', tech: '磁性盘片', bw: '~200 MB/s', cost: '~$0.00002/MB', note: '旋转延迟为主要瓶颈；顺序带宽远高于随机访问' },
