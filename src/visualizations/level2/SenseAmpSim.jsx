@@ -2,13 +2,15 @@ import { useState, useEffect, useRef } from 'react'
 
 const VDD = 1.2
 
-export default function SenseAmpSim() {
+export default function SenseAmpSim({ lang = 'en' }) {
   const [csRatio, setCsRatio] = useState(0.10)
   const [storedBit, setStoredBit] = useState(1)
   const [phase, setPhase] = useState('precharge')
   const [blV, setBlV] = useState(VDD / 2)
   const [blbV, setBlbV] = useState(VDD / 2)
   const intervalRef = useRef(null)
+
+  const isZh = lang === 'zh'
 
   const deltaV = csRatio * VDD / 2
   const noiseMargin = 15  // mV — typical SA offset
@@ -56,18 +58,25 @@ export default function SenseAmpSim() {
   const pctBL = (blV / VDD) * 100
   const pctBLB = (blbV / VDD) * 100
 
-  const phaseSteps = [
-    { key: 'precharge', label: 'Precharge' },
-    { key: 'sharing', label: 'Charge Share' },
-    { key: 'firing', label: 'SA Fires' },
-    { key: 'done', label: 'Resolved' },
-  ]
+  const phaseSteps = isZh
+    ? [
+        { key: 'precharge', label: '预充电' },
+        { key: 'sharing',   label: '电荷共享' },
+        { key: 'firing',    label: '放大器触发' },
+        { key: 'done',      label: '判决完成' },
+      ]
+    : [
+        { key: 'precharge', label: 'Precharge' },
+        { key: 'sharing',   label: 'Charge Share' },
+        { key: 'firing',    label: 'SA Fires' },
+        { key: 'done',      label: 'Resolved' },
+      ]
   const phaseIdx = phaseSteps.findIndex((p) => p.key === phase)
 
   return (
     <div className="bg-dram-surface rounded-xl p-6 border border-dram-border">
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-5">
-        Sense Amplifier Simulator
+        {isZh ? '灵敏放大器模拟器' : 'Sense Amplifier Simulator'}
       </h3>
 
       <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -165,7 +174,9 @@ export default function SenseAmpSim() {
 
             {/* Phase label */}
             <text x="110" y="247" textAnchor="middle" fill="#64748b" fontSize="9" fontStyle="italic">
-              Cross-coupled latch — SA{phase === 'done' ? ' resolved' : phase === 'firing' ? ' latching…' : ' idle'}
+              {isZh
+                ? `交叉耦合锁存 — SA${phase === 'done' ? ' 判决完成' : phase === 'firing' ? ' 锁存中…' : ' 空闲'}`
+                : `Cross-coupled latch — SA${phase === 'done' ? ' resolved' : phase === 'firing' ? ' latching…' : ' idle'}`}
             </text>
           </svg>
         </div>
@@ -216,7 +227,9 @@ export default function SenseAmpSim() {
                 {(deltaV * 1000).toFixed(0)}<span className="text-xs">mV</span>
               </div>
               <div className={`text-xs text-center ${reliable ? 'text-dram-green' : 'text-amber-400'}`}>
-                {reliable ? '✓ reliable' : '⚠ marginal'}
+                {reliable
+                  ? (isZh ? '✓ 可靠' : '✓ reliable')
+                  : (isZh ? '⚠ 临界' : '⚠ marginal')}
               </div>
             </div>
           </div>
@@ -233,9 +246,9 @@ export default function SenseAmpSim() {
               className="w-full accent-amber-400"
             />
             <div className="flex justify-between text-xs text-dram-muted mt-0.5">
-              <span>0.03 (tiny Cs)</span>
-              <span>0.10 (typical)</span>
-              <span>0.25 (large Cs)</span>
+              <span>{isZh ? '0.03（极小 Cs）' : '0.03 (tiny Cs)'}</span>
+              <span>{isZh ? '0.10（典型值）' : '0.10 (typical)'}</span>
+              <span>{isZh ? '0.25（大 Cs）' : '0.25 (large Cs)'}</span>
             </div>
             <p className="text-xs text-dram-muted mt-1 font-mono">
               ΔV = Cs/(Cs+Cbl) × Vdd/2 = {(csRatio).toFixed(2)} × {VDD/2} = {(deltaV*1000).toFixed(0)} mV
@@ -244,7 +257,7 @@ export default function SenseAmpSim() {
 
           {/* Stored bit toggle */}
           <div className="flex gap-2 items-center">
-            <span className="text-sm text-dram-muted">Stored bit:</span>
+            <span className="text-sm text-dram-muted">{isZh ? '存储位：' : 'Stored bit:'}</span>
             {[1, 0].map((b) => (
               <button key={b} onClick={() => { setStoredBit(b); reset() }}
                 className={`px-3 py-1 rounded font-mono text-sm border transition-colors ${
@@ -266,7 +279,7 @@ export default function SenseAmpSim() {
                 disabled:opacity-40 disabled:cursor-not-allowed
                 enabled:bg-amber-900/20 enabled:border-amber-700/40 enabled:text-amber-300 enabled:hover:bg-amber-800/30"
             >
-              Connect Cell
+              {isZh ? '连接存储单元' : 'Connect Cell'}
             </button>
             <button
               onClick={fireSA}
@@ -275,20 +288,29 @@ export default function SenseAmpSim() {
                 disabled:opacity-40 disabled:cursor-not-allowed
                 enabled:bg-blue-900/20 enabled:border-blue-700/40 enabled:text-blue-300 enabled:hover:bg-blue-800/30"
             >
-              Fire SA
+              {isZh ? '触发放大器' : 'Fire SA'}
             </button>
             <button
               onClick={reset}
               className="px-4 py-2 rounded-lg text-sm font-medium border border-dram-border text-dram-muted hover:text-dram-text hover:border-dram-muted transition-colors"
             >
-              Precharge
+              {isZh ? '预充电' : 'Precharge'}
             </button>
           </div>
 
           {phase === 'done' && (
             <div className="rounded-lg p-3 bg-green-900/20 border border-green-700/40 text-sm text-green-300">
-              <strong>Resolved:</strong> BL → {storedBit === 1 ? 'Vdd (1.2V)' : 'GND (0V)'}, BLB → {storedBit === 0 ? 'Vdd' : 'GND'}.
-              {' '}Cell capacitor restored to full {storedBit === 1 ? 'Vdd' : 'GND'}.
+              {isZh ? (
+                <>
+                  <strong>判决完成：</strong>BL → {storedBit === 1 ? 'Vdd (1.2V)' : 'GND (0V)'}，BLB → {storedBit === 0 ? 'Vdd' : 'GND'}。
+                  {' '}存储电容已恢复至完整 {storedBit === 1 ? 'Vdd' : 'GND'} 电平。
+                </>
+              ) : (
+                <>
+                  <strong>Resolved:</strong> BL → {storedBit === 1 ? 'Vdd (1.2V)' : 'GND (0V)'}, BLB → {storedBit === 0 ? 'Vdd' : 'GND'}.
+                  {' '}Cell capacitor restored to full {storedBit === 1 ? 'Vdd' : 'GND'}.
+                </>
+              )}
             </div>
           )}
         </div>

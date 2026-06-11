@@ -4,7 +4,8 @@ const TICK_W = 24  // px per ns
 const LANE_H = 32
 const BANKS = 4
 
-export default function FAWViz() {
+export default function FAWViz({ lang = 'en' }) {
+  const isZh = lang === 'zh'
   const [tFAW, setTFAW] = useState(25)  // ns
   const [activates, setActivates] = useState([])  // array of {time, bank}
   const [time, setTime] = useState(0)
@@ -46,7 +47,7 @@ export default function FAWViz() {
   return (
     <div className="bg-dram-surface rounded-xl p-6 border border-dram-border">
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-4">
-        tFAW — Four-Activate Window Constraint
+        {isZh ? 'tFAW — 四激活窗口约束' : 'tFAW — Four-Activate Window Constraint'}
       </h3>
 
       <div className="flex flex-col gap-5">
@@ -54,7 +55,7 @@ export default function FAWViz() {
         <div>
           <label className="text-sm font-medium text-dram-text block mb-1">
             tFAW = <span className="text-dram-amber font-mono">{tFAW} ns</span>
-            <span className="text-dram-muted text-xs ml-2">(typical DDR4: 25–35 ns)</span>
+            <span className="text-dram-muted text-xs ml-2">{isZh ? '（典型 DDR4：25–35 ns）' : '(typical DDR4: 25–35 ns)'}</span>
           </label>
           <input type="range" min="10" max="50" step="5"
             value={tFAW} onChange={(e) => { setTFAW(Number(e.target.value)); reset() }}
@@ -71,12 +72,12 @@ export default function FAWViz() {
                 backgroundColor: bankColors[b] + '15',
                 color: bankColors[b],
               }}>
-              ACT Bank {b}
+              {isZh ? `激活 存储体 ${b}` : `ACT Bank ${b}`}
             </button>
           ))}
           <button onClick={reset}
             className="px-4 py-2 rounded-lg text-sm font-medium border border-dram-border text-dram-muted hover:text-dram-text transition-colors">
-            Reset
+            {isZh ? '重置' : 'Reset'}
           </button>
         </div>
 
@@ -162,18 +163,18 @@ export default function FAWViz() {
         {/* Status */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           <div className="bg-dram-bg rounded-lg p-3">
-            <div className="text-xs text-dram-muted">Total activates</div>
+            <div className="text-xs text-dram-muted">{isZh ? '总激活次数' : 'Total activates'}</div>
             <div className="text-xl font-bold font-mono text-dram-text">{activates.length}</div>
           </div>
           <div className="bg-dram-bg rounded-lg p-3">
-            <div className="text-xs text-dram-muted">Max in any window</div>
+            <div className="text-xs text-dram-muted">{isZh ? '窗口内最大激活数' : 'Max in any window'}</div>
             <div className={`text-xl font-bold font-mono ${maxInAnyWindow >= 4 ? 'text-amber-400' : 'text-dram-green'}`}>
               {maxInAnyWindow} / 4
             </div>
           </div>
           <div className="bg-dram-bg rounded-lg p-3">
-            <div className="text-xs text-dram-muted">Why it exists</div>
-            <div className="text-xs text-dram-muted mt-1">IR drop: 4 simultaneous row opens cause ΔI surge, violating power plane integrity</div>
+            <div className="text-xs text-dram-muted">{isZh ? '存在原因' : 'Why it exists'}</div>
+            <div className="text-xs text-dram-muted mt-1">{isZh ? 'IR 压降：4 个存储体同时激活产生 ΔI 浪涌，违反电源平面完整性' : 'IR drop: 4 simultaneous row opens cause ΔI surge, violating power plane integrity'}</div>
           </div>
         </div>
       </div>

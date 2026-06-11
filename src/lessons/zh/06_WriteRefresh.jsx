@@ -62,7 +62,7 @@ function RefreshMathCard() {
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-3">刷新计算</h3>
       <div className="space-y-2 font-mono text-sm">
         <div className="flex justify-between">
-          <span className="text-dram-muted">保持时间（室温）：</span>
+          <span className="text-dram-muted">JEDEC 保持时间窗口（85°C 上限时）：</span>
           <span className="text-dram-green">64 ms</span>
         </div>
         <div className="flex justify-between">
@@ -92,10 +92,10 @@ function RefreshMathCard() {
 
 function RetentionTempTable() {
   const rows = [
-    { temp: '25°C（室温）', retention: '~64 ms', note: '标准规格' },
-    { temp: '55°C（偏热）', retention: '~8 ms', note: '每升高 10°C 漏电加倍，共 3 次加倍' },
-    { temp: '85°C（结温热态）', retention: '~1 ms', note: '从 25°C 起共 6 次加倍' },
-    { temp: '95°C（过温）', retention: '<0.5 ms', note: '即使执行刷新也存在数据丢失风险' },
+    { temp: '25°C（室温）', retention: '~1–4 s', note: '远超规格；实测保持时间可达秒级' },
+    { temp: '55°C（偏热）', retention: '~512 ms', note: '阿伦尼乌斯：约为 85°C 规格值的 8 倍' },
+    { temp: '85°C（规格上限）', retention: '≥64 ms', note: 'JEDEC 基准温度——最弱存储单元在此温度须满足此值' },
+    { temp: '95°C（扩展温度）', retention: '≥32 ms', note: 'JEDEC 2× 刷新规格；tREFI 缩短至 3.9 µs' },
   ]
   return (
     <div className="overflow-x-auto rounded-xl border border-dram-border mb-6">
@@ -185,8 +185,10 @@ export default function L06() {
             漏电会有所贡献。</li>
       </ul>
       <p>
-        综合这些机制，一个存储单元的电荷会在约 <strong>25°C 下的 64 ms</strong> 内
-        从满量消耗至低于 50% 感测阈值。所有 DRAM 必须在此时间窗口内完成刷新。
+        综合这些机制，存储单元电荷持续泄漏。在室温（25°C）下，实测保持时间通常为
+        <strong>1–4 秒</strong>。JEDEC 将保持时间窗口定义为
+        <strong>85°C 时不低于 64 ms</strong>——即在最高额定工作温度下，最弱的存储单元
+        也必须能在两次刷新之间维持数据完整性。
       </p>
 
       <h2>温度与保持时间</h2>
@@ -198,13 +200,15 @@ export default function L06() {
       <RetentionTempTable />
 
       <p>
-        JEDEC 通过两种刷新规格来应对此问题：标准规格（在结温最高 85°C 时 64 ms）
-        和<strong>高温自刷新（HTSR）</strong>——当 LPDDR 设备的片上温度传感器
-        读数超过 85°C 时，激活更快的 32 ms 刷新速率。服务器 DRAM 有时在高负载
-        情况下使用 <strong>2× 刷新速率模式</strong>（tREFI = 3.9 µs）。
+        JEDEC 定义了两个工作温度范围：标准范围（0–85°C），保持时间窗口 64 ms，
+        tREFI = 7.8 µs；扩展温度范围（85–95°C），窗口缩短至 32 ms，tREFI = 3.9 µs。
+        这与阿伦尼乌斯预测完全吻合——从 85°C 再升高 10°C，漏电翻倍，保持时间
+        对应减半，恰好得到 ≥32 ms。LPDDR 将此称为<strong>高温自刷新（HTSR）</strong>，
+        服务器 DDR 则称为 <strong>2× 刷新速率模式</strong>。超过 95°C 属于无规格区间，
+        任何刷新速率都无法保证数据安全。
       </p>
 
-      <DRAMCellViz />
+      <DRAMCellViz lang="zh" />
 
       <h2>刷新机制</h2>
       <p>

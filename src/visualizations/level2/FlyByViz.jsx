@@ -5,7 +5,8 @@ const SLOT_GAP = 60   // px between slots on bus
 const PROP_DELAY = 0.6  // ns per slot gap (signal propagation)
 const STUB_Z = 40    // stub impedance in ohms
 
-export default function FlyByViz() {
+export default function FlyByViz({ lang = 'en' }) {
+  const isZh = lang === 'zh'
   const [stubLen, setStubLen] = useState(0.5)  // inches
   const [topology, setTopology] = useState('flyby')  // flyby | t-topology
   const [animating, setAnimating] = useState(false)
@@ -57,16 +58,16 @@ export default function FlyByViz() {
   return (
     <div className="bg-dram-surface rounded-xl p-6 border border-dram-border">
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-4">
-        DDR Signal Topology — Fly-by vs. T-topology
+        {isZh ? 'DDR 信号拓扑 — 飞越拓扑 vs. T 形拓扑' : 'DDR Signal Topology — Fly-by vs. T-topology'}
       </h3>
 
       <div className="flex flex-col gap-5">
         {/* Controls */}
         <div className="flex flex-wrap gap-6">
           <div>
-            <div className="text-xs font-semibold text-dram-muted uppercase mb-2">Topology</div>
+            <div className="text-xs font-semibold text-dram-muted uppercase mb-2">{isZh ? '拓扑' : 'Topology'}</div>
             <div className="flex gap-2">
-              {[['flyby', 'Fly-by (DDR4/5)'], ['t-topology', 'T-topology (DDR2/3)']].map(([v, lbl]) => (
+              {(isZh ? [['flyby', '飞越拓扑 (DDR4/5)'], ['t-topology', 'T 形拓扑 (DDR2/3)']] : [['flyby', 'Fly-by (DDR4/5)'], ['t-topology', 'T-topology (DDR2/3)']]).map(([v, lbl]) => (
                 <button key={v} onClick={() => { setTopology(v); setReflections([]) }}
                   className={`px-3 py-1.5 rounded text-xs font-medium border transition-colors ${
                     topology === v ? 'bg-dram-blue/20 border-dram-blue text-dram-blue' : 'border-dram-border text-dram-muted'
@@ -78,15 +79,15 @@ export default function FlyByViz() {
           </div>
           <div>
             <label className="text-xs font-semibold text-dram-muted uppercase block mb-2">
-              Stub length: <span className="text-dram-amber font-mono normal-case">{stubLen}" ({(stubLen * 170).toFixed(0)} ps)</span>
+              {isZh ? '截线长度：' : 'Stub length: '}<span className="text-dram-amber font-mono normal-case">{stubLen}" ({(stubLen * 170).toFixed(0)} ps)</span>
             </label>
             <input type="range" min="0.1" max="2.0" step="0.1"
               value={stubLen} onChange={(e) => { setStubLen(Number(e.target.value)); setReflections([]) }}
               className="w-full accent-amber-400" />
             <div className="flex justify-between text-xs text-dram-muted mt-0.5">
-              <span>0.1" (OK)</span>
-              <span className="text-amber-400">0.5" (marginal)</span>
-              <span className="text-red-400">2.0" (bad)</span>
+              <span>0.1" ({isZh ? '良好' : 'OK'})</span>
+              <span className="text-amber-400">0.5" ({isZh ? '临界' : 'marginal'})</span>
+              <span className="text-red-400">2.0" ({isZh ? '过长' : 'bad'})</span>
             </div>
           </div>
         </div>
@@ -175,9 +176,14 @@ export default function FlyByViz() {
 
             {topology === 'flyby' && (
               <text x={svgW / 2} y={svgH - 10} textAnchor="middle" fill="#22c55e" fontSize="9">
-                {stubLen <= 0.5
-                  ? `Short stubs (${stubLen}") — minimal reflection, supports DDR4/5 at 3200+ MT/s`
-                  : `Long stubs (${stubLen}") — reflections (shown red) degrade signal integrity`}
+                {isZh
+                  ? (stubLen <= 0.5
+                    ? `短截线 (${stubLen}") — 反射极小，支持 DDR4/5 3200+ MT/s`
+                    : `长截线 (${stubLen}") — 反射（红色显示）降低信号完整性`)
+                  : (stubLen <= 0.5
+                    ? `Short stubs (${stubLen}") — minimal reflection, supports DDR4/5 at 3200+ MT/s`
+                    : `Long stubs (${stubLen}") — reflections (shown red) degrade signal integrity`)
+                }
               </text>
             )}
           </svg>
@@ -189,27 +195,35 @@ export default function FlyByViz() {
             <button onClick={startAnim} disabled={animating}
               className="px-4 py-2 rounded-lg text-sm font-medium bg-dram-blue/10 border border-dram-blue/40
                 text-dram-blue hover:bg-dram-blue/20 disabled:opacity-40 transition-colors">
-              {animating ? 'Propagating…' : '▶ Animate signal'}
+              {isZh ? (animating ? '传播中…' : '▶ 动画演示信号') : (animating ? 'Propagating…' : '▶ Animate signal')}
             </button>
           )}
           <div className="text-xs text-dram-muted">
-            Signal reaches slot 4 with <span className="font-mono text-dram-blue">{(3 * PROP_DELAY).toFixed(1)} ns</span> delay vs. slot 1 — write leveling corrects this per-rank
+            {isZh
+              ? <>{`插槽 4 的信号相比插槽 1 晚 `}<span className="font-mono text-dram-blue">{(3 * PROP_DELAY).toFixed(1)} ns</span>{` — 写均衡逐 Rank 校正此偏斜`}</>
+              : <>{'Signal reaches slot 4 with '}<span className="font-mono text-dram-blue">{(3 * PROP_DELAY).toFixed(1)} ns</span>{' delay vs. slot 1 — write leveling corrects this per-rank'}</>
+            }
           </div>
         </div>
 
         {/* Trade-off table */}
         <div className="rounded-lg overflow-hidden border border-dram-border text-xs">
           <div className="grid grid-cols-3 bg-dram-bg">
-            {['', 'Fly-by (DDR4/5)', 'T-topology (DDR2/3)'].map((h) => (
+            {(isZh ? ['', '飞越拓扑 (DDR4/5)', 'T 形拓扑 (DDR2/3)'] : ['', 'Fly-by (DDR4/5)', 'T-topology (DDR2/3)']).map((h) => (
               <div key={h} className="px-3 py-2 font-semibold text-dram-muted">{h}</div>
             ))}
           </div>
-          {[
+          {(isZh ? [
+            ['最高速度', '3200–8400 MT/s', '~533 MT/s'],
+            ['信号完整性', '良好（短截线）', 'T 形结点有反射'],
+            ['需要写均衡', '是（逐 Rank 偏斜）', '否'],
+            ['布线复杂度', '较简单（菊花链）', '复杂（等长布线）'],
+          ] : [
             ['Max speed', '3200–8400 MT/s', '~533 MT/s'],
             ['Signal integrity', 'Good (short stubs)', 'Reflections at T-junction'],
             ['Write leveling needed', 'Yes (per-rank delay)', 'No'],
             ['Routing complexity', 'Simpler daisy-chain', 'Complex matched-length'],
-          ].map(([row, flyby, t]) => (
+          ]).map(([row, flyby, t]) => (
             <div key={row} className="grid grid-cols-3 border-t border-dram-border">
               <div className="px-3 py-2 text-dram-muted">{row}</div>
               <div className="px-3 py-2 text-dram-green">{flyby}</div>

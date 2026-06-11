@@ -19,7 +19,7 @@ export default function L2_08() {
         校验子（Syndrome）如何定位错误，以及为什么 Chipkill 需要 ×4 位宽的芯片。
       </div>
 
-      <ECCSim />
+      <ECCSim lang="zh" />
 
       <h2>为什么 64 位数据需要 8 个校验位？</h2>
       <p>

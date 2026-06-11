@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 
-export default function DRAMCellViz({ mode = 'explore' }) {
+export default function DRAMCellViz({ mode = 'explore', lang = 'en' }) {
+  const isZh = lang === 'zh'
   const [charge, setCharge] = useState(0.85)
   const [wordline, setWordline] = useState(false)
   const [bitline, setBitline] = useState(null)
-  const [status, setStatus] = useState('Idle — wordline LOW, cell isolated')
+  const [status, setStatus] = useState(isZh ? '空闲 — wordline 低电平，存储单元隔离' : 'Idle — wordline LOW, cell isolated')
   const [leaking, setLeaking] = useState(false)
   const leakRef = useRef(null)
 
@@ -13,39 +14,49 @@ export default function DRAMCellViz({ mode = 'explore' }) {
   const activateWordline = () => {
     setWordline(true)
     setBitline(charge)
-    setStatus(`Wordline HIGH — cell connected. Bit line charges to ${(charge * 1.5).toFixed(2)}V. Sense amp detects: logic ${bit}`)
+    setStatus(isZh
+      ? `Wordline 高电平 — 存储单元接通。位线充电至 ${(charge * 1.5).toFixed(2)}V。灵敏放大器检测：逻辑 ${bit}`
+      : `Wordline HIGH — cell connected. Bit line charges to ${(charge * 1.5).toFixed(2)}V. Sense amp detects: logic ${bit}`)
     setTimeout(() => {
       setWordline(false)
-      setStatus(`Wordline LOW — cell restored. Stored value: ${bit}`)
+      setStatus(isZh
+        ? `Wordline 低电平 — 存储单元已恢复。存储值：${bit}`
+        : `Wordline LOW — cell restored. Stored value: ${bit}`)
     }, 2000)
   }
 
   const writeValue = (val) => {
     setWordline(true)
-    setStatus(`Writing ${val}… wordline HIGH, driving bit line to ${val === 1 ? 'Vdd (~1.2V)' : 'GND (0V)'}`)
+    setStatus(isZh
+      ? `写入 ${val}… wordline 高电平，将位线驱动至 ${val === 1 ? 'Vdd (~1.2V)' : 'GND (0V)'}`
+      : `Writing ${val}… wordline HIGH, driving bit line to ${val === 1 ? 'Vdd (~1.2V)' : 'GND (0V)'}`)
     setTimeout(() => {
       setCharge(val === 1 ? 0.9 : 0.05)
       setWordline(false)
       setBitline(null)
-      setStatus(`Write complete. Cell now stores logic ${val}`)
+      setStatus(isZh
+        ? `写入完成。存储单元现在存储逻辑 ${val}`
+        : `Write complete. Cell now stores logic ${val}`)
     }, 1500)
   }
 
   const startLeak = () => {
     setLeaking(true)
-    setStatus('Leaking… capacitor charge slowly draining (no refresh!)')
+    setStatus(isZh ? '漏电中… 电容电荷缓慢流失（未刷新！）' : 'Leaking… capacitor charge slowly draining (no refresh!)')
   }
 
   const stopLeak = () => {
     setLeaking(false)
-    setStatus('Leak stopped')
+    setStatus(isZh ? '漏电已停止' : 'Leak stopped')
   }
 
   const refresh = () => {
     setLeaking(false)
     const saved = bit
     setCharge(saved === 1 ? 0.9 : 0.05)
-    setStatus(`Refreshed! Sense amp read ${saved}, restored full charge.`)
+    setStatus(isZh
+      ? `刷新完成！灵敏放大器读取到 ${saved}，已恢复满电荷。`
+      : `Refreshed! Sense amp read ${saved}, restored full charge.`)
   }
 
   useEffect(() => {
@@ -55,7 +66,9 @@ export default function DRAMCellViz({ mode = 'explore' }) {
         const next = Math.max(0, c - 0.02)
         if (next === 0) {
           setLeaking(false)
-          setStatus('⚠️ Charge lost! Data corrupted — bit flipped to 0 without refresh!')
+          setStatus(isZh
+            ? '⚠️ 电荷丢失！数据损坏 — 未刷新导致比特翻转为 0！'
+            : '⚠️ Charge lost! Data corrupted — bit flipped to 0 without refresh!')
         }
         return next
       })
@@ -69,7 +82,7 @@ export default function DRAMCellViz({ mode = 'explore' }) {
   return (
     <div className="bg-dram-surface rounded-xl p-6 border border-dram-border">
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-5">
-        DRAM Cell (1T1C) — interactive
+        {isZh ? 'DRAM 存储单元（1T1C）— 交互式' : 'DRAM Cell (1T1C) — interactive'}
       </h3>
 
       <div className="flex flex-col md:flex-row gap-8 items-start">
@@ -137,7 +150,7 @@ export default function DRAMCellViz({ mode = 'explore' }) {
             >
               {Math.round(charge * 100)}%
             </text>
-            <text x="120" y="228" textAnchor="middle" fill="#64748b" fontSize="10">charge</text>
+            <text x="120" y="228" textAnchor="middle" fill="#64748b" fontSize="10">{isZh ? '电荷' : 'charge'}</text>
 
             {/* Cell plate — biased at Vdd/2, NOT ground */}
             <line x1="120" y1="259" x2="120" y2="266" stroke="#475569" strokeWidth="2" />
@@ -151,7 +164,7 @@ export default function DRAMCellViz({ mode = 'explore' }) {
               stroke={bit === 1 ? '#22c55e' : '#ef4444'}
               strokeWidth="1.5"
             />
-            <text x="35" y="165" textAnchor="middle" fill="#94a3b8" fontSize="9">Stored</text>
+            <text x="35" y="165" textAnchor="middle" fill="#94a3b8" fontSize="9">{isZh ? '存储值' : 'Stored'}</text>
             <text x="35" y="178" textAnchor="middle"
               fill={bit === 1 ? '#22c55e' : '#ef4444'} fontSize="16" fontWeight="bold"
             >
@@ -175,7 +188,7 @@ export default function DRAMCellViz({ mode = 'explore' }) {
                          border border-amber-700/40 hover:bg-amber-900/50 disabled:opacity-40
                          transition-colors"
             >
-              Read Cell
+              {isZh ? '读取存储单元' : 'Read Cell'}
             </button>
             <button
               onClick={() => writeValue(1)}
@@ -203,7 +216,7 @@ export default function DRAMCellViz({ mode = 'explore' }) {
                            border border-dram-border hover:bg-slate-700 disabled:opacity-40
                            transition-colors"
               >
-                Simulate Leak
+                {isZh ? '模拟漏电' : 'Simulate Leak'}
               </button>
             ) : (
               <button
@@ -211,7 +224,7 @@ export default function DRAMCellViz({ mode = 'explore' }) {
                 className="px-3 py-2 rounded-lg bg-slate-700/50 text-dram-muted text-sm font-medium
                            border border-dram-border hover:bg-slate-700 transition-colors"
               >
-                Stop Leak
+                {isZh ? '停止漏电' : 'Stop Leak'}
               </button>
             )}
           </div>
@@ -223,15 +236,15 @@ export default function DRAMCellViz({ mode = 'explore' }) {
                          border border-blue-700/50 hover:bg-blue-900/60 transition-colors
                          animate-pulse"
             >
-              ⚡ Refresh Row
+              {isZh ? '⚡ 刷新行' : '⚡ Refresh Row'}
             </button>
           )}
 
           <div className="text-xs text-dram-muted space-y-1 pt-2 border-t border-dram-border">
-            <p><strong className="text-dram-text">Charge &gt; 50%</strong> → logic 1</p>
-            <p><strong className="text-dram-text">Charge ≤ 50%</strong> → logic 0</p>
-            <p><strong className="text-dram-text">Read is destructive</strong> — sense amp must restore charge</p>
-            <p><strong className="text-dram-text">Refresh period</strong> ≈ 64 ms (8192 rows cycled)</p>
+            <p><strong className="text-dram-text">{isZh ? '电荷 > 50%' : 'Charge > 50%'}</strong> → {isZh ? '逻辑 1' : 'logic 1'}</p>
+            <p><strong className="text-dram-text">{isZh ? '电荷 ≤ 50%' : 'Charge ≤ 50%'}</strong> → {isZh ? '逻辑 0' : 'logic 0'}</p>
+            <p><strong className="text-dram-text">{isZh ? '读操作具有破坏性' : 'Read is destructive'}</strong>{isZh ? ' — 灵敏放大器必须恢复电荷' : ' — sense amp must restore charge'}</p>
+            <p><strong className="text-dram-text">{isZh ? '刷新周期' : 'Refresh period'}</strong> ≈ 64 ms {isZh ? '（8192 行循环）' : '(8192 rows cycled)'}</p>
           </div>
         </div>
       </div>

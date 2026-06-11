@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const levels = [
+const levelsEn = [
   {
     label: 'Registers',
     latency: '< 1 ns',
@@ -67,13 +67,82 @@ const levels = [
   },
 ]
 
-export default function MemoryHierarchyViz() {
+const levelsZh = [
+  {
+    label: '寄存器',
+    latency: '< 1 ns',
+    capacity: '< 1 KB',
+    bandwidth: '~10 TB/s',
+    color: '#a855f7',
+    width: 80,
+    description: '位于 CPU 核心内部。容量极小，速度极快。存放当前正在处理的操作数。',
+  },
+  {
+    label: 'L1 缓存',
+    latency: '~1 ns',
+    capacity: '32–64 KB',
+    bandwidth: '~4 TB/s',
+    color: '#3b82f6',
+    width: 130,
+    description: '每核独立的片上 SRAM 缓存。延迟近乎为零。存放紧密循环的工作集。',
+  },
+  {
+    label: 'L2 缓存',
+    latency: '~5 ns',
+    capacity: '256 KB–2 MB',
+    bandwidth: '~1 TB/s',
+    color: '#06b6d4',
+    width: 180,
+    description: '每核或共享的较大统一缓存。填补 L1 缺失，无需访问片外存储。',
+  },
+  {
+    label: 'L3 缓存',
+    latency: '~20–40 ns',
+    capacity: '8–64 MB',
+    bandwidth: '~200 GB/s',
+    color: '#22c55e',
+    width: 230,
+    description: '所有核共享的最后一级片上缓存。此处缺失则访问主存。',
+  },
+  {
+    label: 'DRAM（主存）',
+    latency: '~60–100 ns',
+    capacity: '4–256 GB',
+    bandwidth: '~50–100 GB/s',
+    color: '#f59e0b',
+    width: 280,
+    description: '动态 RAM — 本课程的重点。价格低廉，密度高。比 L1 慢约 100 倍，但容量大 1000 倍。',
+    highlight: true,
+  },
+  {
+    label: 'NVMe SSD',
+    latency: '~100 µs',
+    capacity: '0.5–8 TB',
+    bandwidth: '~7 GB/s',
+    color: '#ef4444',
+    width: 330,
+    description: '非易失性闪存存储。每次访问比 DRAM 慢约 1000 倍，但数据持久化。',
+  },
+  {
+    label: '机械硬盘 / 磁带',
+    latency: '~5–10 ms',
+    capacity: '1–100 TB',
+    bandwidth: '~200 MB/s',
+    color: '#64748b',
+    width: 380,
+    description: '磁性存储。速度最慢，每比特成本最低。主要用于大容量归档存储。',
+  },
+]
+
+export default function MemoryHierarchyViz({ lang = 'en' }) {
+  const isZh = lang === 'zh'
   const [active, setActive] = useState(4)
+  const levels = isZh ? levelsZh : levelsEn
 
   return (
     <div className="bg-dram-surface rounded-xl p-6 border border-dram-border">
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-6">
-        Memory Hierarchy — click a level to explore
+        {isZh ? '存储层次结构 — 点击层级探索' : 'Memory Hierarchy — click a level to explore'}
       </h3>
 
       <div className="flex gap-8 flex-col md:flex-row">
@@ -101,8 +170,8 @@ export default function MemoryHierarchyViz() {
             </button>
           ))}
           <div className="mt-2 flex justify-between w-full px-2 text-xs text-dram-muted">
-            <span>← Faster / Smaller</span>
-            <span>Slower / Larger →</span>
+            <span>{isZh ? '← 更快 / 更小' : '← Faster / Smaller'}</span>
+            <span>{isZh ? '更慢 / 更大 →' : 'Slower / Larger →'}</span>
           </div>
         </div>
 
@@ -124,11 +193,18 @@ export default function MemoryHierarchyViz() {
             </div>
             <p className="text-dram-muted text-sm mb-4">{levels[active].description}</p>
             <div className="grid grid-cols-3 gap-3">
-              {[
-                { label: 'Latency', value: levels[active].latency },
-                { label: 'Capacity', value: levels[active].capacity },
-                { label: 'Bandwidth', value: levels[active].bandwidth },
-              ].map((stat) => (
+              {(isZh
+                ? [
+                    { label: '延迟', value: levels[active].latency },
+                    { label: '容量', value: levels[active].capacity },
+                    { label: '带宽', value: levels[active].bandwidth },
+                  ]
+                : [
+                    { label: 'Latency', value: levels[active].latency },
+                    { label: 'Capacity', value: levels[active].capacity },
+                    { label: 'Bandwidth', value: levels[active].bandwidth },
+                  ]
+              ).map((stat) => (
                 <div key={stat.label} className="bg-dram-bg rounded-lg p-3">
                   <div className="text-xs text-dram-muted mb-1">{stat.label}</div>
                   <div

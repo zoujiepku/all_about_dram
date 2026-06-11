@@ -17,7 +17,7 @@ export default function L2_02() {
         <strong className="text-dram-blue">与 Level 1 的联系：</strong>在第 3 模块（DRAM 存储单元）和第 5 模块（读操作）中，字线被简单处理为高/低两态信号。本节探讨为什么字线必须摆幅<em>高于</em> Vdd，以及为什么在待机状态下必须摆幅<em>低于</em> GND。
       </div>
 
-      <WordlineViz />
+      <WordlineViz lang="zh" />
 
       <h2>为何需要 Vpp &gt; Vdd</h2>
       <p>

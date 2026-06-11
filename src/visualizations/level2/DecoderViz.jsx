@@ -2,9 +2,11 @@ import { useState } from 'react'
 
 const NUM_ROWS = 8  // 3-bit address
 
-export default function DecoderViz() {
+export default function DecoderViz({ lang = 'en' }) {
   const [addrBits, setAddrBits] = useState([0, 0, 0])
   const [step, setStep] = useState(0)  // 0=input, 1=predecode, 2=decode, 3=wordline
+
+  const isZh = lang === 'zh'
 
   const addr = addrBits[2] * 4 + addrBits[1] * 2 + addrBits[0]
 
@@ -25,7 +27,9 @@ export default function DecoderViz() {
     setStep(0)
   }
 
-  const stepLabels = ['Address input', 'Predecode', 'NAND decode', 'Wordline active']
+  const stepLabels = isZh
+    ? ['地址输入', '预译码', 'NAND 译码', '字线激活']
+    : ['Address input', 'Predecode', 'NAND decode', 'Wordline active']
   const maxStep = 3
 
   const advance = () => setStep((s) => Math.min(s + 1, maxStep))
@@ -34,7 +38,9 @@ export default function DecoderViz() {
   return (
     <div className="bg-dram-surface rounded-xl p-6 border border-dram-border">
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-5">
-        Row Decoder — Predecode → NAND decode → Wordline
+        {isZh
+          ? '行译码器 — 预译码 → NAND 译码 → 字线'
+          : 'Row Decoder — Predecode → NAND decode → Wordline'}
       </h3>
 
       {/* Step indicator */}
@@ -54,7 +60,9 @@ export default function DecoderViz() {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Address input */}
         <div className="space-y-4">
-          <div className="text-xs font-semibold text-dram-muted uppercase mb-2">Address bits</div>
+          <div className="text-xs font-semibold text-dram-muted uppercase mb-2">
+            {isZh ? '地址位' : 'Address bits'}
+          </div>
           <div className="flex gap-3">
             {[2, 1, 0].map((i) => (
               <button
@@ -72,13 +80,17 @@ export default function DecoderViz() {
           </div>
           <div className="text-xs font-mono space-y-0.5">
             <div className="text-dram-muted">A[2] A[1] A[0]</div>
-            <div className="text-dram-blue font-bold">Row {addr} selected</div>
+            <div className="text-dram-blue font-bold">
+              {isZh ? `第 ${addr} 行已选中` : `Row ${addr} selected`}
+            </div>
           </div>
 
           {/* Predecode lines */}
           {step >= 1 && (
             <div className="space-y-1">
-              <div className="text-xs font-semibold text-dram-muted uppercase mb-1">Predecode lines</div>
+              <div className="text-xs font-semibold text-dram-muted uppercase mb-1">
+                {isZh ? '预译码线' : 'Predecode lines'}
+              </div>
               {['A2·A1', 'A2·Ā1', 'Ā2·A1', 'Ā2·Ā1'].map((lbl, i) => (
                 <div key={i} className={`flex items-center gap-2 px-2 py-1 rounded text-xs font-mono ${
                   preDec21[i] ? 'bg-amber-900/30 text-amber-300 border border-amber-700/40'
@@ -104,7 +116,9 @@ export default function DecoderViz() {
         {/* NAND gate array / wordlines */}
         <div className="flex-1">
           <div className="text-xs font-semibold text-dram-muted uppercase mb-2">
-            {step >= 2 ? 'NAND decode gates → Wordlines' : 'Wordlines (8 rows)'}
+            {step >= 2
+              ? (isZh ? 'NAND 译码门 → 字线' : 'NAND decode gates → Wordlines')
+              : (isZh ? '字线（8 行）' : 'Wordlines (8 rows)')}
           </div>
           <div className="space-y-1">
             {Array.from({ length: NUM_ROWS }, (_, row) => {
@@ -162,7 +176,9 @@ export default function DecoderViz() {
                   <span className={`font-mono w-12 text-right ${
                     isSelected && step >= 3 ? 'text-dram-green font-bold' : 'text-dram-muted'
                   }`}>
-                    {isSelected && step >= 3 ? 'ACTIVE' : `R${row}`}
+                    {isSelected && step >= 3
+                      ? (isZh ? '激活' : 'ACTIVE')
+                      : `R${row}`}
                   </span>
                 </div>
               )
@@ -176,15 +192,17 @@ export default function DecoderViz() {
         <button onClick={advance} disabled={step >= maxStep}
           className="px-4 py-2 rounded-lg text-sm font-medium bg-dram-blue/10 border border-dram-blue/40
             text-dram-blue hover:bg-dram-blue/20 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
-          Next step →
+          {isZh ? '下一步 →' : 'Next step →'}
         </button>
         <button onClick={reset}
           className="px-4 py-2 rounded-lg text-sm font-medium border border-dram-border text-dram-muted
             hover:text-dram-text hover:border-dram-muted transition-colors">
-          Reset
+          {isZh ? '重置' : 'Reset'}
         </button>
         <div className="text-xs text-dram-muted self-center font-mono">
-          NAND gate for row {addr}: inputs = (A2̄={addrBits[2] ? '' : '̄'}{addrBits[2]}, A1̄={addrBits[1]}, A0̄={addrBits[0]})
+          {isZh
+            ? `第 ${addr} 行的 NAND 门：输入 = (A2=${addrBits[2]}, A1=${addrBits[1]}, A0=${addrBits[0]})`
+            : `NAND gate for row ${addr}: inputs = (A2̄=${addrBits[2] ? '' : '̄'}${addrBits[2]}, A1̄=${addrBits[1]}, A0̄=${addrBits[0]})`}
         </div>
       </div>
     </div>

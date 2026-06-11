@@ -19,7 +19,7 @@ export default function L2_05() {
         多颗芯片和多个 Rank 如何共享总线，以及如何防止它们之间的冲突。
       </div>
 
-      <RankDiagram />
+      <RankDiagram lang="zh" />
 
       <h2>DIMM 总线结构：72 = 64 + 8</h2>
       <p>

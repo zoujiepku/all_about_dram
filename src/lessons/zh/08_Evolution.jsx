@@ -136,7 +136,7 @@ export default function L08() {
         <p className="text-dram-muted mt-2">从 FPM DRAM（1987 年）到 DDR5（2021 年）——每一代如何从相同的存储单元中榨取更多带宽</p>
       </div>
 
-      <EvolutionTimelineViz />
+      <EvolutionTimelineViz lang="zh" />
 
       <h2>每一代究竟改变了什么</h2>
       <p>

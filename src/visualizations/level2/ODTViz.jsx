@@ -74,27 +74,35 @@ function EyeDiagram({ eyeV, eyeT, ioStd }) {
   )
 }
 
-export default function ODTViz() {
+export default function ODTViz({ lang = 'en' }) {
   const [rtt, setRtt] = useState(60)
   const [ioStd, setIoStd] = useState('pod')
   const [odtTiming, setOdtTiming] = useState('dynamic')
+
+  const isZh = lang === 'zh'
 
   const { eyeV, eyeT, reflection } = useMemo(() => eyeQuality(rtt, ioStd), [rtt, ioStd])
 
   return (
     <div className="bg-dram-surface rounded-xl p-6 border border-dram-border">
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-4">
-        On-Die Termination — Eye Diagram Response
+        {isZh ? 'ODT（On-Die Termination 片上终端）— 眼图响应' : 'On-Die Termination — Eye Diagram Response'}
       </h3>
 
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         {/* Eye diagram */}
         <div className="flex-shrink-0">
-          <div className="text-xs text-dram-muted mb-2 text-center">Eye diagram (simulated)</div>
+          <div className="text-xs text-dram-muted mb-2 text-center">
+            {isZh ? '眼图（仿真）' : 'Eye diagram (simulated)'}
+          </div>
           <EyeDiagram key={`${rtt}-${ioStd}`} eyeV={eyeV} eyeT={eyeT} ioStd={ioStd} />
           <div className="mt-2 text-center">
             <span className={`text-sm font-bold ${eyeV > 0.6 ? 'text-dram-green' : eyeV > 0.3 ? 'text-amber-400' : 'text-red-400'}`}>
-              {eyeV > 0.6 ? '✓ Open' : eyeV > 0.3 ? '⚠ Marginal' : '✗ Closed'}
+              {eyeV > 0.6
+                ? (isZh ? '✓ 张开' : '✓ Open')
+                : eyeV > 0.3
+                  ? (isZh ? '⚠ 临界' : '⚠ Marginal')
+                  : (isZh ? '✗ 闭合' : '✗ Closed')}
             </span>
           </div>
         </div>
@@ -103,20 +111,26 @@ export default function ODTViz() {
         <div className="flex-1 space-y-5">
           <div>
             <label className="text-sm font-medium text-dram-text block mb-1">
-              Rtt (ODT value): <span className="text-dram-amber font-mono">{rtt} Ω</span>
+              {isZh ? (
+                <>Rtt（终端匹配阻抗）：<span className="text-dram-amber font-mono">{rtt} Ω</span></>
+              ) : (
+                <>Rtt (ODT value): <span className="text-dram-amber font-mono">{rtt} Ω</span></>
+              )}
             </label>
             <input type="range" min="20" max="240" step="20"
               value={rtt} onChange={(e) => setRtt(Number(e.target.value))}
               className="w-full accent-amber-400" />
             <div className="flex justify-between text-xs text-dram-muted mt-0.5">
-              <span>20Ω (overdamp)</span>
-              <span className="text-dram-green">60Ω (optimal)</span>
-              <span>240Ω (underdamp)</span>
+              <span>{isZh ? '20Ω（过阻尼）' : '20Ω (overdamp)'}</span>
+              <span className="text-dram-green">{isZh ? '60Ω（最优）' : '60Ω (optimal)'}</span>
+              <span>{isZh ? '240Ω（欠阻尼）' : '240Ω (underdamp)'}</span>
             </div>
           </div>
 
           <div>
-            <div className="text-xs font-semibold text-dram-muted uppercase mb-2">I/O Standard</div>
+            <div className="text-xs font-semibold text-dram-muted uppercase mb-2">
+              {isZh ? 'I/O 标准' : 'I/O Standard'}
+            </div>
             <div className="flex gap-2">
               {[['pod', 'POD-1.2 (DDR4/5)'], ['sstl', 'SSTL-1.2 (DDR3)']].map(([v, lbl]) => (
                 <button key={v} onClick={() => setIoStd(v)}
@@ -131,11 +145,11 @@ export default function ODTViz() {
 
           <div className="rounded-lg p-4 bg-dram-bg text-xs space-y-2">
             <div className="flex justify-between">
-              <span className="text-dram-muted">Trace impedance Z₀</span>
+              <span className="text-dram-muted">{isZh ? '走线阻抗 Z₀' : 'Trace impedance Z₀'}</span>
               <span className="font-mono text-dram-text">{Z0} Ω</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-dram-muted">Reflection coefficient Γ</span>
+              <span className="text-dram-muted">{isZh ? '反射系数 Γ' : 'Reflection coefficient Γ'}</span>
               <span className={`font-mono ${reflection < 0.2 ? 'text-dram-green' : reflection < 0.5 ? 'text-amber-400' : 'text-red-400'}`}>
                 {reflection.toFixed(3)}
               </span>
@@ -145,16 +159,27 @@ export default function ODTViz() {
               <span className="font-mono text-dram-muted">= ({rtt}−{Z0})/({rtt}+{Z0})</span>
             </div>
             <div className="flex justify-between border-t border-dram-border pt-2">
-              <span className="text-dram-muted">Best Rtt for min reflection</span>
+              <span className="text-dram-muted">{isZh ? '最小反射时最优 Rtt' : 'Best Rtt for min reflection'}</span>
               <span className="font-mono text-dram-green">{Z0} Ω (Γ = 0)</span>
             </div>
           </div>
 
           <div className="rounded-lg overflow-hidden border border-dram-border text-xs">
             <div className="grid grid-cols-3 bg-dram-bg px-3 py-2 font-semibold text-dram-muted">
-              <div>Standard</div><div>Driver</div><div>Notes</div>
+              <div>{isZh ? '标准' : 'Standard'}</div>
+              <div>{isZh ? '驱动器' : 'Driver'}</div>
+              <div>{isZh ? '备注' : 'Notes'}</div>
             </div>
-            {[
+            {isZh ? [
+              ['SSTL-1.2', '推挽', 'DDR3 — 差分终端匹配'],
+              ['POD-1.2', '开漏', 'DDR4/5 — 仅上拉；功耗更低'],
+            ].map(([std, drv, note]) => (
+              <div key={std} className="grid grid-cols-3 border-t border-dram-border px-3 py-2">
+                <div className={ioStd === std.toLowerCase().split('-')[0] ? 'text-dram-blue font-bold' : 'text-dram-muted'}>{std}</div>
+                <div className="text-dram-muted">{drv}</div>
+                <div className="text-dram-muted">{note}</div>
+              </div>
+            )) : [
               ['SSTL-1.2', 'Push-pull', 'DDR3 — differential termination'],
               ['POD-1.2', 'Open drain', 'DDR4/5 — pull-up only; lower power'],
             ].map(([std, drv, note]) => (

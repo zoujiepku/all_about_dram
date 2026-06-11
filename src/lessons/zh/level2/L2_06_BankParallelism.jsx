@@ -19,7 +19,7 @@ export default function L2_06() {
         无论每个 Bank 的独立时序如何，它限制了在短时间窗口内可以打开的 Bank 数量。
       </div>
 
-      <FAWViz />
+      <FAWViz lang="zh" />
 
       <h2>Bank 与并行性的重要性</h2>
       <p>

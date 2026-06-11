@@ -23,7 +23,8 @@ const LANES = [
   { key: 'rank1', label: 'Rank 1', y: 2 },
 ]
 
-export default function RankDiagram() {
+export default function RankDiagram({ lang = 'en' }) {
+  const isZh = lang === 'zh'
   const [numRanks, setNumRanks] = useState(2)
   const [showTRTRS, setShowTRTRS] = useState(true)
   const totalCycles = 20
@@ -44,7 +45,7 @@ export default function RankDiagram() {
   return (
     <div className="bg-dram-surface rounded-xl p-6 border border-dram-border">
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-4">
-        Multi-Rank Timing — tRTRS Bus Turnaround
+        {isZh ? '多 Rank 时序 — tRTRS 总线切换' : 'Multi-Rank Timing — tRTRS Bus Turnaround'}
       </h3>
 
       <div className="flex flex-col gap-6">
@@ -65,7 +66,7 @@ export default function RankDiagram() {
               )
             ))}
             <text x={labW + totalCycles * TICK / 2} y={svgH - 6}
-              textAnchor="middle" fill="#475569" fontSize="9">Clock cycles</text>
+              textAnchor="middle" fill="#475569" fontSize="9">{isZh ? '时钟周期' : 'Clock cycles'}</text>
 
             {/* Lane labels */}
             {LANES.map((lane, li) => (
@@ -166,12 +167,17 @@ export default function RankDiagram() {
 
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
+          {(isZh ? [
+            ['总线位宽', `${BUS_WIDTH} 位`, '#3b82f6'],
+            ['tRTRS', `${tRTRS} ns`, '#ef4444'],
+            ['tCL / tRCD / tRP', `各 ${tCL} ns`, '#f59e0b'],
+            ['Rank 数量', '2（独立）', '#22c55e'],
+          ] : [
             ['Bus width', `${BUS_WIDTH}-bit`, '#3b82f6'],
             ['tRTRS', `${tRTRS} ns`, '#ef4444'],
             ['tCL / tRCD / tRP', `${tCL} ns each`, '#f59e0b'],
             ['Ranks shown', '2 (independent)', '#22c55e'],
-          ].map(([k, v, c]) => (
+          ]).map(([k, v, c]) => (
             <div key={k} className="bg-dram-bg rounded-lg p-3">
               <div className="text-xs text-dram-muted">{k}</div>
               <div className="text-sm font-bold font-mono" style={{ color: c }}>{v}</div>
@@ -182,14 +188,15 @@ export default function RankDiagram() {
         <label className="flex items-center gap-2 cursor-pointer text-sm text-dram-text">
           <input type="checkbox" checked={showTRTRS} onChange={(e) => setShowTRTRS(e.target.checked)}
             className="accent-red-500" />
-          Show tRTRS gap
+          {isZh ? '显示 tRTRS 间隙' : 'Show tRTRS gap'}
         </label>
 
         <div className="rounded-lg p-4 bg-dram-bg text-xs text-dram-muted space-y-1">
-          <div className="font-semibold text-dram-text">Why tRTRS exists</div>
-          <div>The DQ bus is shared across all ranks. When switching which rank drives the bus,
-            ODT termination must switch and the previous driver must tri-state before the new one asserts.
-            tRTRS ≈ 1–2 clock cycles protects against bus contention and signal integrity violations.</div>
+          <div className="font-semibold text-dram-text">{isZh ? 'tRTRS 存在的原因' : 'Why tRTRS exists'}</div>
+          <div>{isZh
+            ? 'DQ 总线由所有 Rank 共享。切换驱动总线的 Rank 时，ODT 终端必须同步切换，前一个驱动器必须先置为高阻态，新驱动器才能驱动总线。tRTRS ≈ 1–2 个时钟周期，用于防止总线竞争和信号完整性违规。'
+            : 'The DQ bus is shared across all ranks. When switching which rank drives the bus, ODT termination must switch and the previous driver must tri-state before the new one asserts. tRTRS ≈ 1–2 clock cycles protects against bus contention and signal integrity violations.'
+          }</div>
         </div>
       </div>
     </div>

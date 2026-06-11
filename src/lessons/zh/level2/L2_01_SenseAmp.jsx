@@ -17,7 +17,7 @@ export default function L2_01() {
         <strong className="text-dram-blue">与 Level 1 的联系：</strong>在第 4 模块（阵列组织）中，你学到了灵敏放大器（SA）用于检测存储单元连接到位线后留下的微小电压摆幅。本节深入 SA 内部：它使用多少个晶体管、如何保证可靠性，以及如何量化噪声容限。
       </div>
 
-      <SenseAmpSim />
+      <SenseAmpSim lang="zh" />
 
       <h2>电荷共享问题</h2>
       <p>

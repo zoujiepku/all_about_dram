@@ -25,7 +25,8 @@ function formatMs(ms) {
 
 const TEMPS = Array.from({ length: 13 }, (_, i) => 25 + i * 5)  // 25 to 85°C
 
-export default function RetentionViz() {
+export default function RetentionViz({ lang = 'en' }) {
+  const isZh = lang === 'zh'
   const [tempC, setTempC] = useState(55)
   const [showRule, setShowRule] = useState(true)
 
@@ -61,7 +62,7 @@ export default function RetentionViz() {
   return (
     <div className="bg-dram-surface rounded-xl p-6 border border-dram-border">
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-4">
-        Retention vs. Temperature — Arrhenius Model
+        {isZh ? '保持时间 vs. 温度 — Arrhenius 模型' : 'Retention vs. Temperature — Arrhenius Model'}
       </h3>
 
       <div className="flex flex-col lg:flex-row gap-6 items-start">
@@ -91,11 +92,11 @@ export default function RetentionViz() {
               </text>
             ))}
             <text x={pad.l + plotW / 2} y={svgH - 3} textAnchor="middle" fill="#64748b" fontSize="9">
-              Temperature
+              {isZh ? '温度' : 'Temperature'}
             </text>
             <text x={10} y={pad.t + plotH / 2} textAnchor="middle" fill="#64748b" fontSize="9"
               transform={`rotate(-90, 10, ${pad.t + plotH / 2})`}>
-              Retention
+              {isZh ? '保持时间' : 'Retention'}
             </text>
 
             {/* Arrhenius curve */}
@@ -134,7 +135,7 @@ export default function RetentionViz() {
         <div className="flex-1 space-y-4">
           <div>
             <label className="text-sm font-medium text-dram-text block mb-1">
-              Temperature: <span className="text-dram-amber font-mono">{tempC}°C</span>
+              {isZh ? '温度：' : 'Temperature: '}<span className="text-dram-amber font-mono">{tempC}°C</span>
             </label>
             <input type="range" min="25" max="85" step="5"
               value={tempC} onChange={(e) => setTempC(Number(e.target.value))}
@@ -142,22 +143,22 @@ export default function RetentionViz() {
             <div className="flex justify-between text-xs text-dram-muted mt-0.5">
               <span>25°C</span>
               <span>55°C</span>
-              <span>85°C (TCASE max)</span>
+              <span>85°C ({isZh ? 'TCASE 最高温' : 'TCASE max'})</span>
             </div>
           </div>
 
           <div className="rounded-lg p-4 bg-dram-bg text-sm space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-dram-muted">Retention @ {tempC}°C</span>
+              <span className="text-dram-muted">{isZh ? `${tempC}°C 保持时间` : `Retention @ ${tempC}°C`}</span>
               <span className="font-bold font-mono text-dram-green">{formatMs(tau)}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-dram-muted">Retention @ 25°C</span>
+              <span className="text-dram-muted">{isZh ? '25°C 保持时间' : 'Retention @ 25°C'}</span>
               <span className="font-bold font-mono text-dram-blue">{formatMs(tau25)}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-dram-muted">Retention @ 85°C</span>
-              <span className="font-bold font-mono text-amber-400">64 ms (spec)</span>
+              <span className="text-dram-muted">{isZh ? '85°C 保持时间' : 'Retention @ 85°C'}</span>
+              <span className="font-bold font-mono text-amber-400">64 ms ({isZh ? '规格' : 'spec'})</span>
             </div>
             <div className="border-t border-dram-border pt-2 text-xs text-dram-muted font-mono">
               τ(T) = τ₀ · exp(Ea / kT)<br />
@@ -168,16 +169,16 @@ export default function RetentionViz() {
           <label className="flex items-center gap-2 cursor-pointer text-sm text-dram-text">
             <input type="checkbox" checked={showRule} onChange={(e) => setShowRule(e.target.checked)}
               className="accent-amber-400" />
-            Show 2× per 10°C rule
+            {isZh ? '显示每 10°C 减半规则' : 'Show 2× per 10°C rule'}
           </label>
 
           <div className="rounded-lg p-3 bg-dram-bg text-xs text-dram-muted space-y-1">
-            <div className="font-semibold text-dram-text">Variable Retention Time (VRT)</div>
+            <div className="font-semibold text-dram-text">{isZh ? '可变保持时间（VRT）' : 'Variable Retention Time (VRT)'}</div>
             <div>
-              Some cells exhibit VRT — their retention time randomly switches between a long and short value
-              (hours apart). This is thought to be caused by a single oxide trap near the storage node that
-              intermittently captures/releases charge. VRT cells are the hardest to screen at test — they pass
-              at room temperature but may fail months later, especially at elevated temperature.
+              {isZh
+                ? '部分存储单元表现出 VRT——其保持时间在长值与短值之间随机切换（切换间隔为数小时）。这被认为是由存储节点附近的单个氧化层陷阱间歇性捕获/释放电荷所致。VRT 单元在测试中最难筛查——室温下可通过所有测试，却可能在数月后失效，尤其是在高温下。'
+                : 'Some cells exhibit VRT — their retention time randomly switches between a long and short value (hours apart). This is thought to be caused by a single oxide trap near the storage node that intermittently captures/releases charge. VRT cells are the hardest to screen at test — they pass at room temperature but may fail months later, especially at elevated temperature.'
+              }
             </div>
           </div>
         </div>

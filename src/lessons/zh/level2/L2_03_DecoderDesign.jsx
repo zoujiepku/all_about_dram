@@ -17,7 +17,7 @@ export default function L2_03() {
         <strong className="text-dram-blue">与 Level 1 的联系：</strong>在第 5 模块（读操作）中，你看到 RAS（行地址选通）选择一行，CAS（列地址选通）选择一列。译码器就是将 n 位地址转换为单一有效字线或位线的电路。
       </div>
 
-      <DecoderViz />
+      <DecoderViz lang="zh" />
 
       <h2>基于 NAND 的行译码器</h2>
       <p>

@@ -1,74 +1,141 @@
 import { useState } from 'react'
 
-const PHASES = [
-  {
-    id: 0,
-    label: 'tRP — Row Precharge',
-    symbol: 'tRP',
-    color: '#3b82f6',
-    desc: 'Time to precharge bit lines back to Vdd/2 after the previous row is closed. Typically 10–15 ns on DDR4.',
-    signals: {
-      CLK: [0,1,0,1],
-      CS: [0,0,0,0],
-      RAS: [0,0,0,0],
-      CAS: [1,1,1,1],
-      WE: [0,0,0,0],
-      Command: ['PRE','—','—','—'],
-      'Bit Lines': ['prg','prg','done','done'],
+const PHASES = {
+  en: [
+    {
+      id: 0,
+      label: 'tRP — Row Precharge',
+      symbol: 'tRP',
+      color: '#3b82f6',
+      desc: 'Time to precharge bit lines back to Vdd/2 after the previous row is closed. Typically 10–15 ns on DDR4.',
+      signals: {
+        CLK: [0,1,0,1],
+        CS: [0,0,0,0],
+        RAS: [0,0,0,0],
+        CAS: [1,1,1,1],
+        WE: [0,0,0,0],
+        Command: ['PRE','—','—','—'],
+        'Bit Lines': ['prg','prg','done','done'],
+      },
     },
-  },
-  {
-    id: 1,
-    label: 'tRCD — RAS to CAS Delay',
-    symbol: 'tRCD',
-    color: '#f59e0b',
-    desc: 'Time from row activation (RAS) until the sense amps have fully amplified the signal and the column can be selected. Typically 10–15 ns.',
-    signals: {
-      CLK: [0,1,0,1],
-      CS: [0,0,0,0],
-      RAS: [0,0,1,1],
-      CAS: [1,1,1,1],
-      WE: [1,1,1,1],
-      Command: ['ACT','—','—','—'],
-      'Bit Lines': ['Vdd/2','ΔV','amp','valid'],
+    {
+      id: 1,
+      label: 'tRCD — RAS to CAS Delay',
+      symbol: 'tRCD',
+      color: '#f59e0b',
+      desc: 'Time from row activation (RAS) until the sense amps have fully amplified the signal and the column can be selected. Typically 10–15 ns.',
+      signals: {
+        CLK: [0,1,0,1],
+        CS: [0,0,0,0],
+        RAS: [0,0,1,1],
+        CAS: [1,1,1,1],
+        WE: [1,1,1,1],
+        Command: ['ACT','—','—','—'],
+        'Bit Lines': ['Vdd/2','ΔV','amp','valid'],
+      },
     },
-  },
-  {
-    id: 2,
-    label: 'tCL — CAS Latency',
-    symbol: 'CL',
-    color: '#a855f7',
-    desc: 'Number of clock cycles between issuing a CAS READ command and the first data appearing on the DQ bus. Typically CL=16–40 on DDR4/5.',
-    signals: {
-      CLK: [0,1,0,1,0,1],
-      CS: [0,0,0,0,0,0],
-      RAS: [1,1,1,1,1,1],
-      CAS: [0,1,1,1,1,1],
-      WE: [1,1,1,1,1,1],
-      Command: ['RD','—','—','—','—','—'],
-      DQ: ['Z','Z','Z','Z','D0','D1'],
+    {
+      id: 2,
+      label: 'tCL — CAS Latency',
+      symbol: 'CL',
+      color: '#a855f7',
+      desc: 'Number of clock cycles between issuing a CAS READ command and the first data appearing on the DQ bus. Typically CL=16–40 on DDR4/5.',
+      signals: {
+        CLK: [0,1,0,1,0,1],
+        CS: [0,0,0,0,0,0],
+        RAS: [1,1,1,1,1,1],
+        CAS: [0,1,1,1,1,1],
+        WE: [1,1,1,1,1,1],
+        Command: ['RD','—','—','—','—','—'],
+        DQ: ['Z','Z','Z','Z','D0','D1'],
+      },
     },
-  },
-  {
-    id: 3,
-    label: 'tRAS — Row Active Strobe',
-    symbol: 'tRAS',
-    color: '#22c55e',
-    desc: 'Minimum time a row must remain active before PRE can be issued. For a read, tRAS(min) ≥ tRCD + CL. The full row cycle time is tRC = tRAS + tRP (not tRAS itself).',
-    signals: {
-      CLK: [0,1,0,1,0,1,0,1],
-      Command: ['ACT','—','RD','—','—','PRE','—','—'],
-      Row: ['open','open','open','open','open','close','—','—'],
+    {
+      id: 3,
+      label: 'tRAS — Row Active Strobe',
+      symbol: 'tRAS',
+      color: '#22c55e',
+      desc: 'Minimum time a row must remain active before PRE can be issued. For a read, tRAS(min) ≥ tRCD + CL. The full row cycle time is tRC = tRAS + tRP (not tRAS itself).',
+      signals: {
+        CLK: [0,1,0,1,0,1,0,1],
+        Command: ['ACT','—','RD','—','—','PRE','—','—'],
+        Row: ['open','open','open','open','open','close','—','—'],
+      },
     },
-  },
-]
+  ],
+  zh: [
+    {
+      id: 0,
+      label: 'tRP — 行预充电时间',
+      symbol: 'tRP',
+      color: '#3b82f6',
+      desc: '上一行关闭后，将位线重新预充电至 Vdd/2 所需的时间。DDR4 上通常为 10–15 ns。',
+      signals: {
+        CLK: [0,1,0,1],
+        CS: [0,0,0,0],
+        RAS: [0,0,0,0],
+        CAS: [1,1,1,1],
+        WE: [0,0,0,0],
+        Command: ['PRE','—','—','—'],
+        '位线': ['预充电','预充电','完成','完成'],
+      },
+    },
+    {
+      id: 1,
+      label: 'tRCD — RAS 到 CAS 延迟',
+      symbol: 'tRCD',
+      color: '#f59e0b',
+      desc: '从行激活（RAS）到灵敏放大器完全放大信号、可以选择列之间的时间。通常为 10–15 ns。',
+      signals: {
+        CLK: [0,1,0,1],
+        CS: [0,0,0,0],
+        RAS: [0,0,1,1],
+        CAS: [1,1,1,1],
+        WE: [1,1,1,1],
+        Command: ['ACT','—','—','—'],
+        '位线': ['Vdd/2','ΔV','放大','有效'],
+      },
+    },
+    {
+      id: 2,
+      label: 'tCL — CAS 延迟',
+      symbol: 'CL',
+      color: '#a855f7',
+      desc: '发出 CAS READ 命令到第一个数据出现在 DQ 总线上之间的时钟周期数。DDR4/5 上通常 CL=16–40。',
+      signals: {
+        CLK: [0,1,0,1,0,1],
+        CS: [0,0,0,0,0,0],
+        RAS: [1,1,1,1,1,1],
+        CAS: [0,1,1,1,1,1],
+        WE: [1,1,1,1,1,1],
+        Command: ['RD','—','—','—','—','—'],
+        DQ: ['Z','Z','Z','Z','D0','D1'],
+      },
+    },
+    {
+      id: 3,
+      label: 'tRAS — 行激活保持时间',
+      symbol: 'tRAS',
+      color: '#22c55e',
+      desc: '发出 PRE 命令前行必须保持激活的最短时间。读操作时 tRAS(min) ≥ tRCD + CL。完整行周期时间为 tRC = tRAS + tRP（而非 tRAS 本身）。',
+      signals: {
+        CLK: [0,1,0,1,0,1,0,1],
+        Command: ['ACT','—','RD','—','—','PRE','—','—'],
+        Row: ['open','open','open','open','open','close','—','—'],
+      },
+    },
+  ],
+}
 
-export default function TimingDiagramViz() {
+export default function TimingDiagramViz({ lang = 'en' }) {
+  const isZh = lang === 'zh'
+  const phases = PHASES[lang] ?? PHASES.en
   const [phase, setPhase] = useState(0)
-  const p = PHASES[phase]
+  const p = phases[phase]
 
   const signalEntries = Object.entries(p.signals || {})
   const clkLen = (p.signals?.CLK || p.signals?.Command || []).length
+  // clkLen kept for potential future use
 
   const renderSignal = (name, values) => {
     const W = 50
@@ -123,12 +190,12 @@ export default function TimingDiagramViz() {
   return (
     <div className="bg-dram-surface rounded-xl p-6 border border-dram-border">
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-4">
-        DRAM Timing Parameters — step through each phase
+        {isZh ? 'DRAM 时序参数 — 逐步了解每个阶段' : 'DRAM Timing Parameters — step through each phase'}
       </h3>
 
       {/* Phase selector */}
       <div className="flex flex-wrap gap-2 mb-5">
-        {PHASES.map((ph) => (
+        {phases.map((ph) => (
           <button
             key={ph.id}
             onClick={() => setPhase(ph.id)}
@@ -168,16 +235,16 @@ export default function TimingDiagramViz() {
           className="px-4 py-1.5 rounded-lg text-sm text-dram-muted border border-dram-border
                      hover:text-dram-text hover:border-dram-muted disabled:opacity-30 transition-colors"
         >
-          ← Previous
+          {isZh ? '← 上一个' : '← Previous'}
         </button>
-        <span className="text-xs text-dram-muted self-center">{phase + 1} / {PHASES.length}</span>
+        <span className="text-xs text-dram-muted self-center">{phase + 1} / {phases.length}</span>
         <button
-          onClick={() => setPhase((p) => Math.min(PHASES.length - 1, p + 1))}
-          disabled={phase === PHASES.length - 1}
+          onClick={() => setPhase((p) => Math.min(phases.length - 1, p + 1))}
+          disabled={phase === phases.length - 1}
           className="px-4 py-1.5 rounded-lg text-sm text-dram-muted border border-dram-border
                      hover:text-dram-text hover:border-dram-muted disabled:opacity-30 transition-colors"
         >
-          Next →
+          {isZh ? '下一个 →' : 'Next →'}
         </button>
       </div>
     </div>

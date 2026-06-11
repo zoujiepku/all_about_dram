@@ -17,7 +17,7 @@ export default function L2_09() {
         <strong className="text-dram-blue">Level 1 关联：</strong>在模块 6（写入与刷新）中，你已了解 DRAM 单元必须每 64 ms 刷新一次。本模块深入探讨为何部分单元会比其他单元更早失效、温度如何加速失效，以及制造商如何保证 10 年产品生命周期内的可靠性。
       </div>
 
-      <RetentionViz />
+      <RetentionViz lang="zh" />
 
       <h2>Arrhenius 保持时间模型</h2>
       <p>

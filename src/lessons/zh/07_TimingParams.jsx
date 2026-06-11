@@ -154,7 +154,7 @@ export default function L07() {
         <p className="text-dram-muted mt-2">tRCD、CL、tRAS、tRP、tFAW——读懂 DRAM 数据手册，理解背后的物理原理</p>
       </div>
 
-      <TimingDiagramViz />
+      <TimingDiagramViz lang="zh" />
 
       <h2>DRAM 为何需要时序约束</h2>
       <p>

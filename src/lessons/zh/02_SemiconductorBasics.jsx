@@ -199,7 +199,7 @@ export default function L02() {
         电容器被隔离；栅极电压超过 V_th 时，源极与漏极之间形成导电沟道。
       </p>
 
-      <MOSFETViz />
+      <MOSFETViz lang="zh" />
 
       <h2>三个工作区</h2>
       <MOSFETExplainer />

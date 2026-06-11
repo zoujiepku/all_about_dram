@@ -17,7 +17,7 @@ export default function L2_04() {
         <strong className="text-dram-blue">与 Level 1 的联系：</strong>在第 7 模块（时序参数）中，你了解到行缓冲区命中（仅需 tCL）比行缓冲区缺失（tRP + tRCD + tCL）快 3–4 倍。内存控制器的调度策略决定了命中的频率。
       </div>
 
-      <SchedulerSim />
+      <SchedulerSim lang="zh" />
 
       <h2>行缓冲区状态分类</h2>
       <p>

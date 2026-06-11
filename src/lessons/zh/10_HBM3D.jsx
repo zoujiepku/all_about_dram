@@ -172,7 +172,7 @@ export default function L10() {
         <p className="text-dram-muted mt-2">垂直堆叠芯片，实现 TB/s 级带宽</p>
       </div>
 
-      <HBMStackViz />
+      <HBMStackViz lang="zh" />
 
       <h2>HBM 诞生的原因：引脚数量的天花板</h2>
       <p>

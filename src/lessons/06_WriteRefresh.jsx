@@ -61,7 +61,7 @@ function RefreshMathCard() {
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-3">Refresh Math</h3>
       <div className="space-y-2 font-mono text-sm">
         <div className="flex justify-between">
-          <span className="text-dram-muted">Retention time (room temp):</span>
+          <span className="text-dram-muted">JEDEC retention window (at 85°C max):</span>
           <span className="text-dram-green">64 ms</span>
         </div>
         <div className="flex justify-between">
@@ -91,10 +91,10 @@ function RefreshMathCard() {
 
 function RetentionTempTable() {
   const rows = [
-    { temp: '25°C (room)', retention: '~64 ms', note: 'Standard spec' },
-    { temp: '55°C (warm)', retention: '~8 ms', note: '2× per 10°C → 3 doublings' },
-    { temp: '85°C (junction hot)', retention: '~1 ms', note: '6 doublings from 25°C' },
-    { temp: '95°C (overtemp)', retention: '<0.5 ms', note: 'Risk of data loss even with refresh' },
+    { temp: '25°C (room)', retention: '~1–4 s', note: 'Far above spec; actual cells measured at seconds' },
+    { temp: '55°C (warm)', retention: '~512 ms', note: 'Arrhenius: ~8× longer than 85°C spec' },
+    { temp: '85°C (spec max)', retention: '≥64 ms', note: 'JEDEC baseline — worst-case cells must meet this' },
+    { temp: '95°C (ext. temp)', retention: '≥32 ms', note: 'JEDEC 2× refresh spec; tREFI halved to 3.9 µs' },
   ]
   return (
     <div className="overflow-x-auto rounded-xl border border-dram-border mb-6">
@@ -191,8 +191,9 @@ export default function L06() {
       </ul>
       <p>
         Combined, these mechanisms drain a cell from full charge to below the 50% sensing
-        threshold in approximately <strong>64 ms at 25°C</strong>. Every DRAM must be refreshed
-        within this window.
+        threshold. At room temperature, measured retention is typically <strong>1–4 seconds</strong>.
+        JEDEC defines the retention window as <strong>64 ms at up to 85°C</strong> — the worstcase
+        cells at maximum operating temperature must survive at least this long between refreshes.
       </p>
 
       <h2>Temperature and Retention</h2>
@@ -204,11 +205,13 @@ export default function L06() {
       <RetentionTempTable />
 
       <p>
-        JEDEC accounts for this with two refresh specifications: standard (64 ms at up to 85°C
-        junction temperature) and <strong>high temperature self-refresh (HTSR)</strong> — used
-        by LPDDR devices that activate a faster 32 ms refresh when the die temperature sensor
-        reads above 85°C. Server DRAMs sometimes use <strong>2× refresh rate mode</strong>
-        (tREFI = 3.9 µs) during high-load conditions.
+        JEDEC defines two operating ranges. Standard (0–85°C): 64 ms refresh window,
+        tREFI = 7.8 µs. Extended temperature (85–95°C): 32 ms window, tREFI = 3.9 µs —
+        this matches the Arrhenius prediction (retention halves per 10°C, so one more
+        doubling from 85°C gives ≥32 ms at 95°C). This is called
+        <strong>high temperature self-refresh (HTSR)</strong> in LPDDR, or
+        <strong>2× refresh rate mode</strong> in server DDR. Above 95°C, no JEDEC spec
+        exists and data loss is unavoidable regardless of refresh rate.
       </p>
 
       <DRAMCellViz />

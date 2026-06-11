@@ -140,7 +140,7 @@ export default function L01() {
         <p className="text-dram-muted mt-2">DRAM 存在的意义、它在存储体系中的位置，以及层次结构为何被设计成现在这个形状</p>
       </div>
 
-      <MemoryHierarchyViz />
+      <MemoryHierarchyViz lang="zh" />
 
       <h2>速度与容量的权衡</h2>
       <p>

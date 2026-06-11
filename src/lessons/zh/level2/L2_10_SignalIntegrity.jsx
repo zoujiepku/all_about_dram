@@ -17,7 +17,7 @@ export default function L2_10() {
         <strong className="text-dram-blue">Level 1 关联：</strong>在模块 8（DRAM 演进）中，你了解到 DDR3 为支持更高速度引入了 fly-by 拓扑。本模块解析该拓扑至关重要的原因：信号反射、各 DIMM 的传播延迟差异，以及用于纠正这些问题的校准协议。
       </div>
 
-      <FlyByViz />
+      <FlyByViz lang="zh" />
 
       <h2>Fly-By 拓扑</h2>
       <p>

@@ -14,7 +14,7 @@ export default function L03() {
         <p className="text-dram-muted mt-2">一个晶体管 + 一个电容器 — 读取、写入与刷新的完整工作原理</p>
       </div>
 
-      <DRAMCellViz />
+      <DRAMCellViz lang="zh" />
 
       <h2>1T1C 单元的结构</h2>
       <p>
@@ -38,7 +38,7 @@ export default function L03() {
         电路图实时更新——点击各阶段时，请观察电压变化、晶体管状态以及电荷流向箭头。
       </p>
 
-      <DRAMCellWalkthrough />
+      <DRAMCellWalkthrough lang="zh" />
 
       <h2>读操作详解</h2>
 

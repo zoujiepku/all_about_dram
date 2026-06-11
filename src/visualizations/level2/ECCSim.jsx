@@ -68,7 +68,8 @@ function syndromeToErrorPos(syndrome) {
 
 const INITIAL_DATA = [1, 0, 1, 1, 0, 1, 0, 0]
 
-export default function ECCSim() {
+export default function ECCSim({ lang = 'en' }) {
+  const isZh = lang === 'zh'
   const [dataBits, setDataBits] = useState(INITIAL_DATA)
   const [errorPos, setErrorPos] = useState(null)  // 1-indexed position of injected error
 
@@ -106,13 +107,13 @@ export default function ECCSim() {
   return (
     <div className="bg-dram-surface rounded-xl p-6 border border-dram-border">
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-4">
-        Hamming(12,8) ECC — Inject a bit error and watch syndrome detection
+        {isZh ? 'Hamming(12,8) ECC — 注入位错误并观察校验子检测' : 'Hamming(12,8) ECC — Inject a bit error and watch syndrome detection'}
       </h3>
 
       <div className="flex flex-col gap-6">
         {/* Data input */}
         <div>
-          <div className="text-xs font-semibold text-dram-muted uppercase mb-2">Data bits (toggle to change)</div>
+          <div className="text-xs font-semibold text-dram-muted uppercase mb-2">{isZh ? '数据位（点击切换）' : 'Data bits (toggle to change)'}</div>
           <div className="flex gap-1.5 flex-wrap">
             {dataBits.map((b, i) => (
               <button key={i} onClick={() => toggleData(i)}
@@ -131,7 +132,7 @@ export default function ECCSim() {
         {/* Codeword display */}
         <div>
           <div className="text-xs font-semibold text-dram-muted uppercase mb-2">
-            12-bit codeword (click any bit to inject error)
+            {isZh ? '12 位码字（点击任意位注入错误）' : '12-bit codeword (click any bit to inject error)'}
           </div>
           <div className="flex gap-1 flex-wrap">
             {positions.map((pos) => {
@@ -164,60 +165,60 @@ export default function ECCSim() {
             })}
           </div>
           <div className="mt-1 flex gap-4 text-xs">
-            <span className="text-dram-blue">■ data bit</span>
-            <span className="text-purple-400">■ parity bit</span>
-            {errorPos && <span className="text-red-400">■ injected error at position {errorPos}</span>}
+            <span className="text-dram-blue">■ {isZh ? '数据位' : 'data bit'}</span>
+            <span className="text-purple-400">■ {isZh ? '奇偶校验位' : 'parity bit'}</span>
+            {errorPos && <span className="text-red-400">■ {isZh ? `注入错误：位置 ${errorPos}` : `injected error at position ${errorPos}`}</span>}
           </div>
         </div>
 
         {/* Syndrome */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <div className="text-xs font-semibold text-dram-muted uppercase mb-2">Syndrome computation</div>
+            <div className="text-xs font-semibold text-dram-muted uppercase mb-2">{isZh ? '校验子计算' : 'Syndrome computation'}</div>
             <div className="space-y-1.5">
               {syndrome.map((bit, p) => (
                 <div key={p} className={`flex items-center gap-2 px-3 py-2 rounded text-xs font-mono ${
                   bit === 1 ? 'bg-red-900/20 border border-red-700/30 text-red-300' : 'bg-dram-bg text-dram-muted'
                 }`}>
                   <span className="text-purple-400">P{p}</span>
-                  <span className="text-dram-muted">covers: {parityCovers[p].join(',')}</span>
+                  <span className="text-dram-muted">{isZh ? '覆盖：' : 'covers: '}{parityCovers[p].join(',')}</span>
                   <span className={`ml-auto font-bold ${bit === 1 ? 'text-red-400' : 'text-dram-green'}`}>
                     S{p} = {bit}
                   </span>
                 </div>
               ))}
               <div className="flex items-center justify-between px-3 py-2 rounded bg-dram-border/20 text-xs font-mono">
-                <span className="text-dram-text">Syndrome S[3:0]</span>
+                <span className="text-dram-text">{isZh ? '校验子 S[3:0]' : 'Syndrome S[3:0]'}</span>
                 <span className={`font-bold ${hasError ? 'text-red-400' : 'text-dram-green'}`}>
-                  {syndrome.reverse().join('')}b = pos {detectedPos} {detectedPos === 0 ? '(no error)' : ''}
+                  {syndrome.reverse().join('')}b = {isZh ? '位置 ' : 'pos '}{detectedPos} {detectedPos === 0 ? (isZh ? '（无错误）' : '(no error)') : ''}
                 </span>
               </div>
             </div>
           </div>
 
           <div>
-            <div className="text-xs font-semibold text-dram-muted uppercase mb-2">Result</div>
+            <div className="text-xs font-semibold text-dram-muted uppercase mb-2">{isZh ? '结果' : 'Result'}</div>
             {!errorPos ? (
               <div className="rounded-lg p-4 bg-green-900/20 border border-green-700/40 text-sm text-green-300">
-                No error injected. Syndrome = 0000. Data is valid.
+                {isZh ? '未注入错误。校验子 = 0000。数据有效。' : 'No error injected. Syndrome = 0000. Data is valid.'}
               </div>
             ) : hasError ? (
               <div className="rounded-lg p-4 bg-amber-900/20 border border-amber-700/40 text-sm text-amber-300 space-y-2">
-                <div><strong>Error detected</strong> at bit position {detectedPos}.</div>
-                <div className="text-xs">Flip bit {detectedPos}: {receivedCW[detectedPos]} → {correctedCW[detectedPos]}</div>
-                <div className="text-xs text-dram-green">✓ Single-bit error corrected (SECDED)</div>
+                <div><strong>{isZh ? '检测到错误' : 'Error detected'}</strong>{isZh ? `，位置 ${detectedPos}。` : ` at bit position ${detectedPos}.`}</div>
+                <div className="text-xs">{isZh ? `翻转位 ${detectedPos}：${receivedCW[detectedPos]} → ${correctedCW[detectedPos]}` : `Flip bit ${detectedPos}: ${receivedCW[detectedPos]} → ${correctedCW[detectedPos]}`}</div>
+                <div className="text-xs text-dram-green">✓ {isZh ? '单比特错误已纠正（SECDED）' : 'Single-bit error corrected (SECDED)'}</div>
               </div>
             ) : (
               <div className="rounded-lg p-4 bg-red-900/20 border border-red-700/40 text-sm text-red-300">
-                Double-bit error detected (syndrome ≠ 0 but position out of range). Cannot correct.
+                {isZh ? '检测到双比特错误（校验子 ≠ 0 但位置超出范围）。无法纠正。' : 'Double-bit error detected (syndrome ≠ 0 but position out of range). Cannot correct.'}
               </div>
             )}
 
             <div className="mt-3 rounded-lg p-3 bg-dram-bg text-xs text-dram-muted space-y-1">
-              <div className="font-semibold text-dram-text">SECDED formula</div>
-              <div>n data bits needs r parity bits where 2^r ≥ n + r + 1</div>
-              <div>64 data bits → need r=7 checks + 1 overall parity = 8 parity bits</div>
-              <div className="text-dram-blue">→ 72-bit DIMM bus = 64+8 ECC</div>
+              <div className="font-semibold text-dram-text">{isZh ? 'SECDED 公式' : 'SECDED formula'}</div>
+              <div>{isZh ? 'n 位数据需要 r 个奇偶校验位，满足 2^r ≥ n + r + 1' : 'n data bits needs r parity bits where 2^r ≥ n + r + 1'}</div>
+              <div>{isZh ? '64 位数据 → 需要 r=7 个校验位 + 1 个整体奇偶位 = 8 个奇偶校验位' : '64 data bits → need r=7 checks + 1 overall parity = 8 parity bits'}</div>
+              <div className="text-dram-blue">→ {isZh ? '72 位 DIMM 总线 = 64+8 ECC' : '72-bit DIMM bus = 64+8 ECC'}</div>
             </div>
           </div>
         </div>

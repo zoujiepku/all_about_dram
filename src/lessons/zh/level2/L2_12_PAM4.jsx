@@ -17,7 +17,7 @@ export default function L2_12() {
         <strong className="text-dram-blue">Level 1 关联：</strong>在模块 9（现代 DRAM）中，你了解到 GDDR6 使用 PAM4 编码。本模块解析其背后的基本信号理论：PAM4 如何实现每符号 2 位的传输、其噪声容限代价，以及 CTLE 和 DFE 均衡如何恢复损失的裕量。
       </div>
 
-      <EyeDiagramViz />
+      <EyeDiagramViz lang="zh" />
 
       <h2>NRZ 与 PAM4 对比</h2>
       <p>

@@ -17,7 +17,7 @@ export default function L2_11() {
         <strong className="text-dram-blue">Level 1 关联：</strong>在模块 9（现代 DRAM）中，你了解到 DDR5 工作在 1.1 V。I/O 标准精确定义了在该电压下信号的驱动与终端方式——哪种电平代表"1"和"0"，以及如何防止信号畸变。
       </div>
 
-      <ODTViz />
+      <ODTViz lang="zh" />
 
       <h2>SSTL-1.2：截线串联终端逻辑</h2>
       <p>

@@ -165,7 +165,7 @@ function refreshSteps() {
 
 // ─── Cell SVG ─────────────────────────────────────────────────────────────────
 
-function CellDiagram({ wlHigh, eq, sa, saOut, blV, capV, flow }) {
+function CellDiagram({ wlHigh, eq, sa, saOut, blV, capV, flow, isZh = false }) {
   const wlColor      = wlHigh ? '#f59e0b' : '#475569'
   const wlTextColor  = wlHigh ? '#f59e0b' : '#64748b'
   const mosOn        = wlHigh
@@ -198,10 +198,14 @@ function CellDiagram({ wlHigh, eq, sa, saOut, blV, capV, flow }) {
       <rect x="115" y="8" width="120" height="50" rx="4"
         fill={saFill} stroke={saStroke} strokeWidth="1.5" />
       <text x="175" y="29" textAnchor="middle" fill={sa ? '#22c55e' : '#94a3b8'} fontSize="10" fontWeight="bold">
-        Sense Amp (SA)
+        {isZh ? '灵敏放大器 (SA)' : 'Sense Amp (SA)'}
       </text>
       <text x="175" y="44" textAnchor="middle" fill={sa ? '#22c55e' : '#64748b'} fontSize="9">
-        {sa ? (saOut === 1 ? 'resolved → 1 (Vdd)' : 'resolved → 0 (GND)') : 'inactive'}
+        {sa
+          ? (saOut === 1
+              ? (isZh ? '判决 → 1 (Vdd)' : 'resolved → 1 (Vdd)')
+              : (isZh ? '判决 → 0 (GND)' : 'resolved → 0 (GND)'))
+          : (isZh ? '未激活' : 'inactive')}
       </text>
       {/* SA to BL connection */}
       <line x1={BLX} y1="33" x2="115" y2="33" stroke={saStroke} strokeWidth="1.5" strokeDasharray={sa ? '0' : '4 3'} />
@@ -209,8 +213,8 @@ function CellDiagram({ wlHigh, eq, sa, saOut, blV, capV, flow }) {
       {/* ── Precharge / EQ box ── */}
       <rect x="10" y="24" width="72" height="28" rx="3"
         fill={eqFill} stroke={eqStroke} strokeWidth="1.5" />
-      <text x="46" y="35" textAnchor="middle" fill={eq ? '#93c5fd' : '#64748b'} fontSize="8.5" fontWeight="bold">Precharge</text>
-      <text x="46" y="46" textAnchor="middle" fill={eq ? '#93c5fd' : '#64748b'} fontSize="8">EQ circuit</text>
+      <text x="46" y="35" textAnchor="middle" fill={eq ? '#93c5fd' : '#64748b'} fontSize="8.5" fontWeight="bold">{isZh ? '预充电' : 'Precharge'}</text>
+      <text x="46" y="46" textAnchor="middle" fill={eq ? '#93c5fd' : '#64748b'} fontSize="8">{isZh ? '均衡电路' : 'EQ circuit'}</text>
       {/* EQ to BL */}
       <line x1="82" y1="38" x2={BLX} y2="38" stroke={eqStroke} strokeWidth="1.5" strokeDasharray={eq ? '0' : '4 3'} />
 
@@ -239,7 +243,7 @@ function CellDiagram({ wlHigh, eq, sa, saOut, blV, capV, flow }) {
       </text>
       <text x={BLX} y={TXN_Y + 30} textAnchor="middle"
         fill={mosOn ? '#fbbf24' : '#64748b'} fontSize="9">
-        {mosOn ? 'ON — conducting' : 'OFF — isolated'}
+        {mosOn ? (isZh ? '导通中' : 'ON — conducting') : (isZh ? '截止 — 隔离' : 'OFF — isolated')}
       </text>
 
       {/* WL gate connection (small horizontal line into transistor body) */}
@@ -262,7 +266,7 @@ function CellDiagram({ wlHigh, eq, sa, saOut, blV, capV, flow }) {
                 stroke={arrowColor} strokeWidth="2" />
               <polygon points={`${BLX + 7},${WIRE_Y2 - 8} ${BLX + 12},${WIRE_Y2} ${BLX + 17},${WIRE_Y2 - 8}`}
                 fill={arrowColor} />
-              <text x={BLX + 22} y={midY + 4} fill={arrowColor} fontSize="8">→ cap</text>
+              <text x={BLX + 22} y={midY + 4} fill={arrowColor} fontSize="8">{isZh ? '→ 电容' : '→ cap'}</text>
             </g>
           )
         } else {
@@ -273,7 +277,7 @@ function CellDiagram({ wlHigh, eq, sa, saOut, blV, capV, flow }) {
                 stroke={arrowColor} strokeWidth="2" />
               <polygon points={`${BLX + 7},${WIRE_Y1 + 8} ${BLX + 12},${WIRE_Y1} ${BLX + 17},${WIRE_Y1 + 8}`}
                 fill={arrowColor} />
-              <text x={BLX + 22} y={midY + 4} fill={arrowColor} fontSize="8">→ BL</text>
+              <text x={BLX + 22} y={midY + 4} fill={arrowColor} fontSize="8">{isZh ? '→ 位线' : '→ BL'}</text>
             </g>
           )
         }
@@ -310,7 +314,7 @@ function CellDiagram({ wlHigh, eq, sa, saOut, blV, capV, flow }) {
 
       {/* Cap label */}
       <text x={BLX} y={CAP_TOP + CAP_H + 22} textAnchor="middle" fill="#64748b" fontSize="9">
-        Storage capacitor (Cs ≈ 20 fF)
+        {isZh ? '存储电容（Cs ≈ 20 fF）' : 'Storage capacitor (Cs ≈ 20 fF)'}
       </text>
 
       {/* ── Reference plate wire ── */}
@@ -323,7 +327,7 @@ function CellDiagram({ wlHigh, eq, sa, saOut, blV, capV, flow }) {
         Vdd/2 = 0.6 V
       </text>
       <text x={BLX} y={CAP_TOP + CAP_H + 69} textAnchor="middle" fill="#64748b" fontSize="8">
-        (cell plate reference)
+        {isZh ? '（存储极板参考电位）' : '(cell plate reference)'}
       </text>
     </svg>
   )
@@ -331,7 +335,8 @@ function CellDiagram({ wlHigh, eq, sa, saOut, blV, capV, flow }) {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export default function DRAMCellWalkthrough() {
+export default function DRAMCellWalkthrough({ lang = 'en' }) {
+  const isZh = lang === 'zh'
   const [op, setOp]           = useState('read')
   const [stored, setStored]   = useState(1)
   const [writeBit, setWriteBit] = useState(1)
@@ -352,12 +357,15 @@ export default function DRAMCellWalkthrough() {
   return (
     <div className="bg-dram-surface rounded-xl p-5 border border-dram-border">
       <h3 className="text-sm font-semibold text-dram-muted uppercase tracking-wider mb-4">
-        1T1C Cell — Step-by-Step Walkthrough
+        {isZh ? '1T1C 存储单元 — 分步详解' : '1T1C Cell — Step-by-Step Walkthrough'}
       </h3>
 
       {/* Operation selector */}
       <div className="flex flex-wrap gap-2 mb-4">
-        {[['read', 'Read'], ['write', 'Write'], ['refresh', 'Refresh']].map(([v, lbl]) => (
+        {(isZh
+          ? [['read', '读取'], ['write', '写入'], ['refresh', '刷新']]
+          : [['read', 'Read'], ['write', 'Write'], ['refresh', 'Refresh']]
+        ).map(([v, lbl]) => (
           <button key={v} onClick={() => setOp2(v)}
             className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors ${
               op === v ? 'bg-dram-blue text-white border-dram-blue' : 'border-dram-border text-dram-muted hover:border-dram-muted'
@@ -368,7 +376,7 @@ export default function DRAMCellWalkthrough() {
 
         {op === 'read' && (
           <>
-            <span className="text-dram-muted self-center text-xs mx-1">stored:</span>
+            <span className="text-dram-muted self-center text-xs mx-1">{isZh ? '存储值：' : 'stored:'}</span>
             {[1, 0].map((b) => (
               <button key={b} onClick={() => setStored2(b)}
                 className={`px-3 py-1 rounded text-xs font-mono font-bold border transition-colors ${
@@ -384,7 +392,7 @@ export default function DRAMCellWalkthrough() {
 
         {op === 'write' && (
           <>
-            <span className="text-dram-muted self-center text-xs mx-1">writing:</span>
+            <span className="text-dram-muted self-center text-xs mx-1">{isZh ? '写入值：' : 'writing:'}</span>
             {[1, 0].map((b) => (
               <button key={b} onClick={() => setWriteBit2(b)}
                 className={`px-3 py-1 rounded text-xs font-mono font-bold border transition-colors ${
@@ -422,6 +430,7 @@ export default function DRAMCellWalkthrough() {
           <CellDiagram
             wlHigh={step.wlHigh} eq={step.eq} sa={step.sa}
             saOut={step.saOut} blV={step.blV} capV={step.capV} flow={step.flow}
+            isZh={isZh}
           />
         </div>
 
@@ -440,7 +449,7 @@ export default function DRAMCellWalkthrough() {
 
           {/* Key insight */}
           <div className="rounded-lg p-3 bg-amber-900/10 border border-amber-700/30 text-xs text-amber-300">
-            <span className="font-semibold text-amber-400">Key insight: </span>{step.insight}
+            <span className="font-semibold text-amber-400">{isZh ? '关键要点：' : 'Key insight: '}</span>{step.insight}
           </div>
 
           {/* Navigation */}
@@ -449,7 +458,7 @@ export default function DRAMCellWalkthrough() {
               disabled={stepIdx === 0}
               className="px-4 py-2 rounded-lg text-sm font-medium border border-dram-border text-dram-muted
                 hover:text-dram-text hover:border-dram-muted disabled:opacity-30 transition-colors">
-              ← Prev
+              {isZh ? '← 上一步' : '← Prev'}
             </button>
             <span className="text-xs text-dram-muted font-mono">
               {stepIdx + 1} / {total}
@@ -458,7 +467,7 @@ export default function DRAMCellWalkthrough() {
               disabled={stepIdx === total - 1}
               className="px-4 py-2 rounded-lg text-sm font-medium bg-dram-blue/10 border border-dram-blue/40
                 text-dram-blue hover:bg-dram-blue/20 disabled:opacity-30 transition-colors">
-              Next →
+              {isZh ? '下一步 →' : 'Next →'}
             </button>
           </div>
         </div>

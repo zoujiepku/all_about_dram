@@ -20,7 +20,7 @@ export default function L2_07() {
         而无需直接访问受害行的数据。
       </div>
 
-      <RowHammerSim />
+      <RowHammerSim lang="zh" />
 
       <h2>RowHammer 的工作机制</h2>
       <p>
