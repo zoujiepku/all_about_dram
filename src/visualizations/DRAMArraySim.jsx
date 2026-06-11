@@ -294,6 +294,18 @@ export default function DRAMArraySim({ lang = 'en' }) {
 
         {/* Log */}
         <div className="flex-1 min-w-0">
+          {/* State indicator */}
+          <div
+            className="rounded-lg px-4 py-2.5 mb-3 border text-sm transition-all duration-300"
+            style={{
+              borderColor: stateInfo.color + '55',
+              backgroundColor: stateInfo.color + '12',
+              color: stateInfo.color,
+            }}
+          >
+            <span className="font-bold font-mono mr-2">{stateInfo.label}</span>
+            <span className="text-dram-muted">{stateInfo.desc}</span>
+          </div>
           <div className="text-xs font-semibold text-dram-muted uppercase mb-2">
             {isZh ? '操作日志' : 'Event Log'}
           </div>
@@ -312,18 +324,7 @@ export default function DRAMArraySim({ lang = 'en' }) {
         </div>
       </div>
 
-      {/* State indicator — below the matrix */}
-      <div
-        className="rounded-lg px-4 py-2.5 mt-4 border text-sm transition-all duration-300"
-        style={{
-          borderColor: stateInfo.color + '55',
-          backgroundColor: stateInfo.color + '12',
-          color: stateInfo.color,
-        }}
-      >
-        <span className="font-bold font-mono mr-2">{stateInfo.label}</span>
-        <span className="text-dram-muted">{stateInfo.desc}</span>
-      </div>
+
     </div>
   )
 }
