@@ -64,8 +64,8 @@ export default function Sidebar({ completed, isOpen, onClose, level = 1, lang = 
           </p>
         </div>
 
-        {/* Language toggle */}
-        <div className="px-5 py-2.5 border-b border-dram-border flex gap-2">
+        {/* Language toggle — desktop only; mobile uses top bar toggle */}
+        <div className="px-5 py-2.5 border-b border-dram-border hidden lg:flex gap-2">
           <button
             onClick={() => switchLang('en')}
             className={`flex-1 text-center text-xs font-semibold py-1.5 rounded-md transition-colors ${
