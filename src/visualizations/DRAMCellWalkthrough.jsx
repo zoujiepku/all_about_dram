@@ -193,7 +193,7 @@ function CellDiagram({ wlHigh, eq, sa, saOut, blV, capV, flow, isZh = false }) {
   const WIRE_Y2 = CAP_TOP - 4     // just above cap top plate = 158
 
   return (
-    <svg viewBox="0 0 240 295" width="100%" height="auto" style={{ maxWidth: 240 }}>
+    <svg viewBox="0 0 240 325" width="100%" height="auto" style={{ maxWidth: 240 }}>
       {/* ── Sense amplifier box ── */}
       <rect x="115" y="8" width="120" height="50" rx="4"
         fill={saFill} stroke={saStroke} strokeWidth="1.5" />
